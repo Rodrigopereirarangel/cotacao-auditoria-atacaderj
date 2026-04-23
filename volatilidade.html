@@ -12,7 +12,7 @@
       color: #c9d1d9;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       min-height: 100vh;
-      padding: 32px 16px;
+      padding: 32px 16px 60px;
     }
 
     header {
@@ -31,10 +31,7 @@
       letter-spacing: -.3px;
     }
 
-    header .subtitle {
-      font-size: .82rem;
-      color: #8b949e;
-    }
+    header .subtitle { font-size: .82rem; color: #8b949e; }
 
     .controls {
       max-width: 860px;
@@ -58,14 +55,10 @@
       align-items: center;
       gap: 6px;
     }
-
     .btn-refresh:hover { background: #30363d; border-color: #58a6ff; }
     .btn-refresh:disabled { opacity: .45; cursor: default; }
 
-    .last-updated {
-      font-size: .78rem;
-      color: #8b949e;
-    }
+    .last-updated { font-size: .78rem; color: #8b949e; }
 
     .progress-bar-wrap {
       max-width: 860px;
@@ -77,7 +70,6 @@
       opacity: 0;
       transition: opacity .2s;
     }
-
     .progress-bar-wrap.visible { opacity: 1; }
 
     .progress-bar {
@@ -88,6 +80,7 @@
       border-radius: 2px;
     }
 
+    /* ── shared table wrapper ── */
     .table-wrap {
       max-width: 860px;
       margin: 0 auto;
@@ -102,9 +95,7 @@
       font-size: .88rem;
     }
 
-    thead tr {
-      background: #161b22;
-    }
+    thead tr { background: #161b22; }
 
     th {
       padding: 11px 14px;
@@ -120,16 +111,8 @@
       transition: color .15s;
       border-bottom: 1px solid #21262d;
     }
-
     th:hover { color: #e6edf3; }
-
-    th .sort-icon {
-      display: inline-block;
-      margin-left: 4px;
-      opacity: .4;
-      font-size: .7rem;
-    }
-
+    th .sort-icon { display: inline-block; margin-left: 4px; opacity: .4; font-size: .7rem; }
     th.sorted .sort-icon { opacity: 1; color: #58a6ff; }
 
     td {
@@ -137,39 +120,23 @@
       border-bottom: 1px solid #161b22;
       white-space: nowrap;
     }
-
     tbody tr:last-child td { border-bottom: none; }
-
     tbody tr:hover { background: #161b22; }
 
-    .ticker {
-      font-weight: 700;
-      color: #58a6ff;
-      font-size: .92rem;
-      letter-spacing: .3px;
-    }
+    .ticker { font-weight: 700; color: #58a6ff; font-size: .92rem; letter-spacing: .3px; }
+    .company-name { font-size: .78rem; color: #8b949e; margin-top: 2px; }
 
-    .company-name {
-      font-size: .78rem;
-      color: #8b949e;
-      margin-top: 2px;
-    }
+    .bar-wrap { display: flex; align-items: center; gap: 10px; }
 
-    .vol-bar-wrap {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .vol-value {
+    .val-num {
       font-variant-numeric: tabular-nums;
       font-weight: 600;
       font-size: .95rem;
-      min-width: 56px;
+      min-width: 60px;
       text-align: right;
     }
 
-    .vol-bar-bg {
+    .bar-bg {
       flex: 1;
       height: 6px;
       background: #21262d;
@@ -177,18 +144,9 @@
       min-width: 80px;
       overflow: hidden;
     }
+    .bar-fill { height: 100%; border-radius: 3px; transition: width .6s ease; }
 
-    .vol-bar {
-      height: 100%;
-      border-radius: 3px;
-      transition: width .6s ease;
-    }
-
-    .n-days {
-      color: #8b949e;
-      font-size: .8rem;
-      font-variant-numeric: tabular-nums;
-    }
+    .n-days { color: #8b949e; font-size: .8rem; font-variant-numeric: tabular-nums; }
 
     .status-loading {
       display: inline-flex;
@@ -197,10 +155,8 @@
       color: #8b949e;
       font-size: .82rem;
     }
-
     .spinner {
-      width: 14px;
-      height: 14px;
+      width: 14px; height: 14px;
       border: 2px solid #30363d;
       border-top-color: #58a6ff;
       border-radius: 50%;
@@ -208,13 +164,9 @@
       display: inline-block;
       flex-shrink: 0;
     }
-
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    .status-error {
-      color: #f85149;
-      font-size: .82rem;
-    }
+    .status-error { color: #f85149; font-size: .82rem; }
 
     .legend {
       max-width: 860px;
@@ -223,21 +175,8 @@
       gap: 20px;
       flex-wrap: wrap;
     }
-
-    .legend-item {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      font-size: .76rem;
-      color: #8b949e;
-    }
-
-    .legend-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 2px;
-      flex-shrink: 0;
-    }
+    .legend-item { display: flex; align-items: center; gap: 7px; font-size: .76rem; color: #8b949e; }
+    .legend-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
 
     .note {
       max-width: 860px;
@@ -246,6 +185,96 @@
       color: #484f58;
       line-height: 1.6;
     }
+
+    /* ── Portfolio sections ── */
+    .section-divider {
+      max-width: 860px;
+      margin: 44px auto 0;
+      border: none;
+      border-top: 1px solid #21262d;
+    }
+
+    .portfolio-section { max-width: 860px; margin: 32px auto 0; }
+
+    .portfolio-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .portfolio-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #e6edf3;
+      letter-spacing: -.2px;
+    }
+
+    .portfolio-formula {
+      font-size: .78rem;
+      color: #8b949e;
+      margin-top: 3px;
+      font-family: 'Courier New', monospace;
+    }
+
+    .portfolio-badge {
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: .75rem;
+      font-weight: 600;
+      letter-spacing: .3px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .badge-sq  { background: rgba(88,166,255,.12); color: #58a6ff; border: 1px solid rgba(88,166,255,.25); }
+    .badge-cu  { background: rgba(188,140,255,.12); color: #bc8cff; border: 1px solid rgba(188,140,255,.25); }
+
+    /* stacked composition bar */
+    .stacked-bar-wrap { margin-bottom: 18px; }
+    .stacked-bar-label { font-size: .72rem; color: #8b949e; margin-bottom: 6px; }
+    .stacked-bar {
+      height: 20px;
+      border-radius: 5px;
+      overflow: hidden;
+      display: flex;
+      width: 100%;
+    }
+    .stacked-segment {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .65rem;
+      font-weight: 700;
+      color: rgba(255,255,255,.9);
+      overflow: hidden;
+      white-space: nowrap;
+      transition: width .6s ease;
+      cursor: default;
+      position: relative;
+    }
+
+    /* portfolio table accent colors */
+    .port-sq th.sorted .sort-icon { color: #58a6ff; }
+    .port-cu th.sorted .sort-icon { color: #bc8cff; }
+
+    .weight-num { color: #e6edf3; }
+
+    .port-sq .bar-fill-accent { background: #1f6feb; }
+    .port-cu .bar-fill-accent { background: #8b5cf6; }
+
+    /* effective N badge */
+    .eff-n-wrap {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: 12px;
+      font-size: .76rem;
+      color: #8b949e;
+    }
+    .eff-n-val { font-weight: 600; color: #c9d1d9; font-variant-numeric: tabular-nums; }
   </style>
 </head>
 <body>
@@ -257,7 +286,7 @@
 
 <div class="controls">
   <button class="btn-refresh" id="btnRefresh" onclick="loadAll()">
-    <span id="refreshIcon">⟳</span> Atualizar
+    <span>⟳</span> Atualizar
   </button>
   <span class="last-updated" id="lastUpdated"></span>
 </div>
@@ -266,6 +295,7 @@
   <div class="progress-bar" id="progressBar"></div>
 </div>
 
+<!-- ── Volatility table ── -->
 <div class="table-wrap">
   <table id="mainTable">
     <thead>
@@ -281,15 +311,14 @@
         </th>
       </tr>
     </thead>
-    <tbody id="tableBody">
-    </tbody>
+    <tbody id="tableBody"></tbody>
   </table>
 </div>
 
 <div class="legend">
-  <div class="legend-item"><div class="legend-dot" style="background:#2ea043"></div> &lt; 25% — Baixa</div>
-  <div class="legend-item"><div class="legend-dot" style="background:#d29922"></div> 25–45% — Moderada</div>
-  <div class="legend-item"><div class="legend-dot" style="background:#f85149"></div> &gt; 45% — Alta</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#2ea043"></div>&lt; 25% — Baixa</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#d29922"></div>25–45% — Moderada</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#f85149"></div>&gt; 45% — Alta</div>
 </div>
 
 <p class="note">
@@ -297,25 +326,111 @@
   Dados sujeitos a ajuste. Não constitui recomendação de investimento.
 </p>
 
+<!-- ── Portfolio: inverse square ── -->
+<hr class="section-divider" />
+
+<section class="portfolio-section" id="portSqSection">
+  <div class="portfolio-header">
+    <div>
+      <div class="portfolio-title">Carteira 1 — Inverso do Quadrado da Volatilidade</div>
+      <div class="portfolio-formula">wᵢ = (1 / σᵢ²) / Σⱼ (1 / σⱼ²)</div>
+    </div>
+    <span class="portfolio-badge badge-sq">1 / σ²</span>
+  </div>
+  <div class="stacked-bar-wrap">
+    <div class="stacked-bar-label">Composição da carteira</div>
+    <div class="stacked-bar" id="stackedSq"></div>
+  </div>
+  <div class="table-wrap">
+    <table class="port-sq" id="tableSq">
+      <thead>
+        <tr>
+          <th onclick="sortPort('sq','ticker')" data-col="ticker">
+            Ativo <span class="sort-icon" id="sq-si-ticker">↕</span>
+          </th>
+          <th onclick="sortPort('sq','vol')" data-col="vol">
+            Vol. Anual <span class="sort-icon" id="sq-si-vol">↕</span>
+          </th>
+          <th onclick="sortPort('sq','weight')" data-col="weight" class="sorted">
+            Peso <span class="sort-icon" id="sq-si-weight">↓</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody id="bodySq"></tbody>
+    </table>
+  </div>
+  <div class="eff-n-wrap" id="effNSq"></div>
+</section>
+
+<!-- ── Portfolio: inverse cube ── -->
+<hr class="section-divider" />
+
+<section class="portfolio-section" id="portCuSection">
+  <div class="portfolio-header">
+    <div>
+      <div class="portfolio-title">Carteira 2 — Inverso do Cubo da Volatilidade</div>
+      <div class="portfolio-formula">wᵢ = (1 / σᵢ³) / Σⱼ (1 / σⱼ³)</div>
+    </div>
+    <span class="portfolio-badge badge-cu">1 / σ³</span>
+  </div>
+  <div class="stacked-bar-wrap">
+    <div class="stacked-bar-label">Composição da carteira</div>
+    <div class="stacked-bar" id="stackedCu"></div>
+  </div>
+  <div class="table-wrap">
+    <table class="port-cu" id="tableCu">
+      <thead>
+        <tr>
+          <th onclick="sortPort('cu','ticker')" data-col="ticker">
+            Ativo <span class="sort-icon" id="cu-si-ticker">↕</span>
+          </th>
+          <th onclick="sortPort('cu','vol')" data-col="vol">
+            Vol. Anual <span class="sort-icon" id="cu-si-vol">↕</span>
+          </th>
+          <th onclick="sortPort('cu','weight')" data-col="weight" class="sorted">
+            Peso <span class="sort-icon" id="cu-si-weight">↓</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody id="bodyCu"></tbody>
+    </table>
+  </div>
+  <div class="eff-n-wrap" id="effNCu"></div>
+</section>
+
 <script>
+  /* ── Config ── */
   const TICKERS = [
     'PRIO3','KLBN11','EQTL3','TTEN3','FIGE3','ABCB4',
     'PSSA3','GMAT3','SLCE3','ITUB4','SUZB3','MILS3',
     'AZZA3','ARCR10','INBR32'
   ];
 
-  let tableData = TICKERS.map(t => ({ ticker: t, vol: null, days: null, error: null, loading: true }));
-  let sortCol = 'vol';
-  let sortAsc = true;
-  let maxVol = 100;
+  /* 15 visually distinct segment colors for stacked bar */
+  const SEG_COLORS = [
+    '#2563eb','#16a34a','#ca8a04','#dc2626','#9333ea',
+    '#0891b2','#ea580c','#4f46e5','#15803d','#b45309',
+    '#be123c','#0e7490','#7c3aed','#1d4ed8','#065f46'
+  ];
 
+  let tableData = TICKERS.map(t => ({ ticker: t, vol: null, days: null, name: '', error: null, loading: true }));
+
+  /* sort state for main vol table */
+  let sortCol = 'vol', sortAsc = true;
+
+  /* sort state per portfolio */
+  const portSort = {
+    sq: { col: 'weight', asc: false },
+    cu: { col: 'weight', asc: false }
+  };
+
+  /* ── Vol helpers ── */
   function volColor(v) {
     if (v == null) return '#58a6ff';
     if (v < 25) return '#2ea043';
     if (v < 45) return '#d29922';
     return '#f85149';
   }
-
   function volTextColor(v) {
     if (v == null) return '#8b949e';
     if (v < 25) return '#3fb950';
@@ -351,10 +466,11 @@
 
   function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
+  /* ── Render main vol table ── */
   function renderRows() {
     const sorted = [...tableData].sort((a, b) => {
-      let va = a[sortCol === 'vol' ? 'vol' : sortCol === 'days' ? 'days' : 'ticker'];
-      let vb = b[sortCol === 'vol' ? 'vol' : sortCol === 'days' ? 'days' : 'ticker'];
+      const va = a[sortCol];
+      const vb = b[sortCol];
       if (va == null && vb == null) return 0;
       if (va == null) return 1;
       if (vb == null) return -1;
@@ -362,11 +478,10 @@
       return sortAsc ? va - vb : vb - va;
     });
 
-    const currentMax = Math.max(...tableData.map(d => d.vol ?? 0), 1);
+    const maxV = Math.max(...tableData.map(d => d.vol ?? 0), 1);
 
-    const tbody = document.getElementById('tableBody');
-    tbody.innerHTML = sorted.map(row => {
-      const pct = row.vol != null ? Math.min((row.vol / (currentMax * 1.1)) * 100, 100) : 0;
+    document.getElementById('tableBody').innerHTML = sorted.map(row => {
+      const pct = row.vol != null ? Math.min((row.vol / (maxV * 1.1)) * 100, 100) : 0;
       const color = volColor(row.vol);
       const textColor = volTextColor(row.vol);
 
@@ -377,13 +492,10 @@
         volCell = `<td><span class="status-error">✗ ${row.error}</span></td>`;
       } else {
         volCell = `<td>
-          <div class="vol-bar-wrap">
-            <span class="vol-value" style="color:${textColor}">${row.vol != null ? row.vol.toFixed(2) + '%' : '—'}</span>
-            <div class="vol-bar-bg">
-              <div class="vol-bar" style="width:${pct}%;background:${color}"></div>
-            </div>
-          </div>
-        </td>`;
+          <div class="bar-wrap">
+            <span class="val-num" style="color:${textColor}">${row.vol != null ? row.vol.toFixed(2) + '%' : '—'}</span>
+            <div class="bar-bg"><div class="bar-fill" style="width:${pct}%;background:${color}"></div></div>
+          </div></td>`;
       }
 
       const daysCell = row.loading
@@ -391,16 +503,129 @@
         : `<td class="n-days">${row.days != null ? row.days.toLocaleString('pt-BR') : '—'}</td>`;
 
       return `<tr>
-        <td>
-          <div class="ticker">${row.ticker}</div>
-          ${row.name ? `<div class="company-name">${row.name}</div>` : ''}
-        </td>
-        ${volCell}
-        ${daysCell}
+        <td><div class="ticker">${row.ticker}</div>${row.name ? `<div class="company-name">${row.name}</div>` : ''}</td>
+        ${volCell}${daysCell}
       </tr>`;
     }).join('');
   }
 
+  function sortTable(col) {
+    sortAsc = sortCol === col ? !sortAsc : true;
+    sortCol = col;
+    document.querySelectorAll('#mainTable th').forEach(th => {
+      th.classList.remove('sorted');
+      th.querySelector('.sort-icon').textContent = '↕';
+    });
+    const th = document.querySelector(`#mainTable th[data-col="${col}"]`);
+    th.classList.add('sorted');
+    th.querySelector('.sort-icon').textContent = sortAsc ? '↑' : '↓';
+    renderRows();
+  }
+
+  /* ── Portfolio calculation ── */
+  function calcWeights(power) {
+    const valid = tableData.filter(d => d.vol != null && !d.error && !d.loading);
+    if (valid.length === 0) return [];
+    const raw = valid.map(d => 1 / Math.pow(d.vol / 100, power)); /* use decimal vol */
+    const total = raw.reduce((a, b) => a + b, 0);
+    return valid.map((d, i) => ({
+      ticker: d.ticker,
+      name: d.name,
+      vol: d.vol,
+      weight: (raw[i] / total) * 100
+    }));
+  }
+
+  /* Herfindahl-based effective N: 1 / Σwᵢ² */
+  function effectiveN(weights) {
+    const sumSq = weights.reduce((s, r) => s + (r.weight / 100) ** 2, 0);
+    return sumSq > 0 ? 1 / sumSq : 0;
+  }
+
+  /* ── Render a portfolio ── */
+  function renderPortfolio(id, power) {
+    const ps = portSort[id];
+    let rows = calcWeights(power);
+    if (rows.length === 0) return;
+
+    /* sort */
+    rows.sort((a, b) => {
+      const va = a[ps.col], vb = b[ps.col];
+      if (typeof va === 'string') return ps.asc ? va.localeCompare(vb) : vb.localeCompare(va);
+      return ps.asc ? va - vb : vb - va;
+    });
+
+    /* stacked bar — use weight order (desc) regardless of table sort */
+    const byWeight = [...rows].sort((a, b) => b.weight - a.weight);
+    const tickerIndex = Object.fromEntries(TICKERS.map((t, i) => [t, i]));
+
+    document.getElementById(`stacked${id === 'sq' ? 'Sq' : 'Cu'}`).innerHTML =
+      byWeight.map(r => {
+        const idx = tickerIndex[r.ticker] ?? 0;
+        const bg = SEG_COLORS[idx % SEG_COLORS.length];
+        const label = r.weight >= 4 ? r.ticker : '';
+        return `<div class="stacked-segment" style="width:${r.weight.toFixed(3)}%;background:${bg}" title="${r.ticker}: ${r.weight.toFixed(2)}%">${label}</div>`;
+      }).join('');
+
+    /* max weight for bar scaling */
+    const maxW = Math.max(...rows.map(r => r.weight));
+
+    const accentClass = id === 'sq' ? 'bar-fill-accent' : 'bar-fill-accent';
+
+    document.getElementById(`body${id === 'sq' ? 'Sq' : 'Cu'}`).innerHTML =
+      rows.map(r => {
+        const idx = tickerIndex[r.ticker] ?? 0;
+        const segColor = SEG_COLORS[idx % SEG_COLORS.length];
+        const pct = (r.weight / (maxW * 1.05)) * 100;
+        return `<tr>
+          <td><div class="ticker">${r.ticker}</div>${r.name ? `<div class="company-name">${r.name}</div>` : ''}</td>
+          <td><span class="val-num" style="color:${volTextColor(r.vol)}">${r.vol.toFixed(2)}%</span></td>
+          <td>
+            <div class="bar-wrap">
+              <span class="val-num weight-num">${r.weight.toFixed(2)}%</span>
+              <div class="bar-bg"><div class="bar-fill ${accentClass}" style="width:${pct}%;background:${segColor}"></div></div>
+            </div>
+          </td>
+        </tr>`;
+      }).join('');
+
+    /* effective N */
+    const en = effectiveN(rows);
+    document.getElementById(`effN${id === 'sq' ? 'Sq' : 'Cu'}`).innerHTML =
+      `<span>Ativos com dados válidos: <span class="eff-n-val">${rows.length}</span></span>
+       <span>N efetivo (1/Σwᵢ²): <span class="eff-n-val">${en.toFixed(2)}</span></span>
+       <span>Maior peso: <span class="eff-n-val">${byWeight[0]?.ticker} (${byWeight[0]?.weight.toFixed(2)}%)</span></span>`;
+  }
+
+  function renderPortfolios() {
+    renderPortfolio('sq', 2);
+    renderPortfolio('cu', 3);
+  }
+
+  /* ── Portfolio sort ── */
+  function sortPort(id, col) {
+    const ps = portSort[id];
+    ps.asc = ps.col === col ? !ps.asc : (col === 'weight' ? false : true);
+    ps.col = col;
+
+    const prefix = id;
+    ['ticker','vol','weight'].forEach(c => {
+      const el = document.getElementById(`${prefix}-si-${c}`);
+      const th = el?.closest('th');
+      if (!th) return;
+      th.classList.remove('sorted');
+      el.textContent = '↕';
+    });
+    const siEl = document.getElementById(`${prefix}-si-${col}`);
+    const activeTh = siEl?.closest('th');
+    if (activeTh) {
+      activeTh.classList.add('sorted');
+      siEl.textContent = ps.asc ? '↑' : '↓';
+    }
+    renderPortfolio(id, id === 'sq' ? 2 : 3);
+  }
+
+  /* ── Load all data ── */
   async function loadAll() {
     const btn = document.getElementById('btnRefresh');
     const progWrap = document.getElementById('progressWrap');
@@ -414,7 +639,6 @@
     renderRows();
 
     let done = 0;
-
     for (const row of tableData) {
       try {
         const { vol, days, name } = await fetchTicker(row.ticker);
@@ -429,6 +653,7 @@
         done++;
         progBar.style.width = `${(done / TICKERS.length) * 100}%`;
         renderRows();
+        renderPortfolios();
         await sleep(120);
       }
     }
@@ -437,26 +662,6 @@
       'Atualizado: ' + new Date().toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
     btn.disabled = false;
     setTimeout(() => { progWrap.classList.remove('visible'); }, 800);
-  }
-
-  function sortTable(col) {
-    if (sortCol === col) {
-      sortAsc = !sortAsc;
-    } else {
-      sortCol = col;
-      sortAsc = col === 'ticker' ? true : true;
-    }
-
-    document.querySelectorAll('th').forEach(th => {
-      th.classList.remove('sorted');
-      th.querySelector('.sort-icon').textContent = '↕';
-    });
-
-    const th = document.querySelector(`th[data-col="${col}"]`);
-    th.classList.add('sorted');
-    th.querySelector('.sort-icon').textContent = sortAsc ? '↑' : '↓';
-
-    renderRows();
   }
 
   loadAll();
