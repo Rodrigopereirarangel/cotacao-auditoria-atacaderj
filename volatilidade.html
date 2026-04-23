@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Volatilidade Anualizada — Carteira</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0d1117;
+      color: #c9d1d9;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      min-height: 100vh;
+      padding: 32px 16px;
+    }
+
+    header {
+      max-width: 860px;
+      margin: 0 auto 28px;
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    header h1 {
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: #e6edf3;
+      letter-spacing: -.3px;
+    }
+
+    header .subtitle {
+      font-size: .82rem;
+      color: #8b949e;
+    }
+
+    .controls {
+      max-width: 860px;
+      margin: 0 auto 16px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-refresh {
+      background: #21262d;
+      border: 1px solid #30363d;
+      color: #c9d1d9;
+      padding: 6px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: .84rem;
+      transition: background .15s, border-color .15s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-refresh:hover { background: #30363d; border-color: #58a6ff; }
+    .btn-refresh:disabled { opacity: .45; cursor: default; }
+
+    .last-updated {
+      font-size: .78rem;
+      color: #8b949e;
+    }
+
+    .progress-bar-wrap {
+      max-width: 860px;
+      margin: 0 auto 12px;
+      height: 3px;
+      background: #21262d;
+      border-radius: 2px;
+      overflow: hidden;
+      opacity: 0;
+      transition: opacity .2s;
+    }
+
+    .progress-bar-wrap.visible { opacity: 1; }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #1f6feb, #58a6ff);
+      width: 0%;
+      transition: width .3s ease;
+      border-radius: 2px;
+    }
+
+    .table-wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      border: 1px solid #21262d;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .88rem;
+    }
+
+    thead tr {
+      background: #161b22;
+    }
+
+    th {
+      padding: 11px 14px;
+      text-align: left;
+      font-weight: 600;
+      font-size: .78rem;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      color: #8b949e;
+      white-space: nowrap;
+      user-select: none;
+      cursor: pointer;
+      transition: color .15s;
+      border-bottom: 1px solid #21262d;
+    }
+
+    th:hover { color: #e6edf3; }
+
+    th .sort-icon {
+      display: inline-block;
+      margin-left: 4px;
+      opacity: .4;
+      font-size: .7rem;
+    }
+
+    th.sorted .sort-icon { opacity: 1; color: #58a6ff; }
+
+    td {
+      padding: 11px 14px;
+      border-bottom: 1px solid #161b22;
+      white-space: nowrap;
+    }
+
+    tbody tr:last-child td { border-bottom: none; }
+
+    tbody tr:hover { background: #161b22; }
+
+    .ticker {
+      font-weight: 700;
+      color: #58a6ff;
+      font-size: .92rem;
+      letter-spacing: .3px;
+    }
+
+    .company-name {
+      font-size: .78rem;
+      color: #8b949e;
+      margin-top: 2px;
+    }
+
+    .vol-bar-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .vol-value {
+      font-variant-numeric: tabular-nums;
+      font-weight: 600;
+      font-size: .95rem;
+      min-width: 56px;
+      text-align: right;
+    }
+
+    .vol-bar-bg {
+      flex: 1;
+      height: 6px;
+      background: #21262d;
+      border-radius: 3px;
+      min-width: 80px;
+      overflow: hidden;
+    }
+
+    .vol-bar {
+      height: 100%;
+      border-radius: 3px;
+      transition: width .6s ease;
+    }
+
+    .n-days {
+      color: #8b949e;
+      font-size: .8rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .status-loading {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #8b949e;
+      font-size: .82rem;
+    }
+
+    .spinner {
+      width: 14px;
+      height: 14px;
+      border: 2px solid #30363d;
+      border-top-color: #58a6ff;
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .status-error {
+      color: #f85149;
+      font-size: .82rem;
+    }
+
+    .legend {
+      max-width: 860px;
+      margin: 16px auto 0;
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: .76rem;
+      color: #8b949e;
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    .note {
+      max-width: 860px;
+      margin: 20px auto 0;
+      font-size: .75rem;
+      color: #484f58;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Volatilidade Anualizada — Carteira</h1>
+  <span class="subtitle">Últimos 3 anos · Dados diários · 252 pregões/ano</span>
+</header>
+
+<div class="controls">
+  <button class="btn-refresh" id="btnRefresh" onclick="loadAll()">
+    <span id="refreshIcon">⟳</span> Atualizar
+  </button>
+  <span class="last-updated" id="lastUpdated"></span>
+</div>
+
+<div class="progress-bar-wrap" id="progressWrap">
+  <div class="progress-bar" id="progressBar"></div>
+</div>
+
+<div class="table-wrap">
+  <table id="mainTable">
+    <thead>
+      <tr>
+        <th onclick="sortTable('ticker')" data-col="ticker">
+          Ativo <span class="sort-icon" id="si-ticker">↕</span>
+        </th>
+        <th onclick="sortTable('vol')" data-col="vol" class="sorted">
+          Volatilidade Anual <span class="sort-icon" id="si-vol">↑</span>
+        </th>
+        <th onclick="sortTable('days')" data-col="days">
+          Pregões <span class="sort-icon" id="si-days">↕</span>
+        </th>
+      </tr>
+    </thead>
+    <tbody id="tableBody">
+    </tbody>
+  </table>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:#2ea043"></div> &lt; 25% — Baixa</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#d29922"></div> 25–45% — Moderada</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#f85149"></div> &gt; 45% — Alta</div>
+</div>
+
+<p class="note">
+  Volatilidade = desvio-padrão dos retornos logarítmicos diários × √252 × 100. Fonte: brapi.dev.
+  Dados sujeitos a ajuste. Não constitui recomendação de investimento.
+</p>
+
+<script>
+  const TICKERS = [
+    'PRIO3','KLBN11','EQTL3','TTEN3','FIGE3','ABCB4',
+    'PSSA3','GMAT3','SLCE3','ITUB4','SUZB3','MILS3',
+    'AZZA3','ARCR10','INBR32'
+  ];
+
+  let tableData = TICKERS.map(t => ({ ticker: t, vol: null, days: null, error: null, loading: true }));
+  let sortCol = 'vol';
+  let sortAsc = true;
+  let maxVol = 100;
+
+  function volColor(v) {
+    if (v == null) return '#58a6ff';
+    if (v < 25) return '#2ea043';
+    if (v < 45) return '#d29922';
+    return '#f85149';
+  }
+
+  function volTextColor(v) {
+    if (v == null) return '#8b949e';
+    if (v < 25) return '#3fb950';
+    if (v < 45) return '#e3b341';
+    return '#f85149';
+  }
+
+  function calcVol(prices) {
+    const closes = prices.map(p => p.close).filter(c => c != null && c > 0);
+    if (closes.length < 10) return null;
+    const returns = [];
+    for (let i = 1; i < closes.length; i++) {
+      const r = Math.log(closes[i] / closes[i - 1]);
+      if (isFinite(r)) returns.push(r);
+    }
+    if (returns.length < 5) return null;
+    const mean = returns.reduce((a, b) => a + b, 0) / returns.length;
+    const variance = returns.reduce((s, r) => s + (r - mean) ** 2, 0) / (returns.length - 1);
+    return Math.sqrt(variance) * Math.sqrt(252) * 100;
+  }
+
+  async function fetchTicker(ticker) {
+    const url = `https://brapi.dev/api/quote/${ticker}?range=3y&interval=1d&fundamental=false`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const json = await res.json();
+    const result = json?.results?.[0];
+    if (!result) throw new Error('sem dados');
+    const prices = result.historicalDataPrice ?? [];
+    const vol = calcVol(prices);
+    return { vol, days: prices.length, name: result.longName ?? result.shortName ?? '' };
+  }
+
+  function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+  function renderRows() {
+    const sorted = [...tableData].sort((a, b) => {
+      let va = a[sortCol === 'vol' ? 'vol' : sortCol === 'days' ? 'days' : 'ticker'];
+      let vb = b[sortCol === 'vol' ? 'vol' : sortCol === 'days' ? 'days' : 'ticker'];
+      if (va == null && vb == null) return 0;
+      if (va == null) return 1;
+      if (vb == null) return -1;
+      if (typeof va === 'string') return sortAsc ? va.localeCompare(vb) : vb.localeCompare(va);
+      return sortAsc ? va - vb : vb - va;
+    });
+
+    const currentMax = Math.max(...tableData.map(d => d.vol ?? 0), 1);
+
+    const tbody = document.getElementById('tableBody');
+    tbody.innerHTML = sorted.map(row => {
+      const pct = row.vol != null ? Math.min((row.vol / (currentMax * 1.1)) * 100, 100) : 0;
+      const color = volColor(row.vol);
+      const textColor = volTextColor(row.vol);
+
+      let volCell;
+      if (row.loading) {
+        volCell = `<td><span class="status-loading"><span class="spinner"></span> carregando…</span></td>`;
+      } else if (row.error) {
+        volCell = `<td><span class="status-error">✗ ${row.error}</span></td>`;
+      } else {
+        volCell = `<td>
+          <div class="vol-bar-wrap">
+            <span class="vol-value" style="color:${textColor}">${row.vol != null ? row.vol.toFixed(2) + '%' : '—'}</span>
+            <div class="vol-bar-bg">
+              <div class="vol-bar" style="width:${pct}%;background:${color}"></div>
+            </div>
+          </div>
+        </td>`;
+      }
+
+      const daysCell = row.loading
+        ? `<td></td>`
+        : `<td class="n-days">${row.days != null ? row.days.toLocaleString('pt-BR') : '—'}</td>`;
+
+      return `<tr>
+        <td>
+          <div class="ticker">${row.ticker}</div>
+          ${row.name ? `<div class="company-name">${row.name}</div>` : ''}
+        </td>
+        ${volCell}
+        ${daysCell}
+      </tr>`;
+    }).join('');
+  }
+
+  async function loadAll() {
+    const btn = document.getElementById('btnRefresh');
+    const progWrap = document.getElementById('progressWrap');
+    const progBar = document.getElementById('progressBar');
+
+    btn.disabled = true;
+    progWrap.classList.add('visible');
+    progBar.style.width = '0%';
+
+    tableData = TICKERS.map(t => ({ ticker: t, vol: null, days: null, name: '', error: null, loading: true }));
+    renderRows();
+
+    let done = 0;
+
+    for (const row of tableData) {
+      try {
+        const { vol, days, name } = await fetchTicker(row.ticker);
+        row.vol = vol;
+        row.days = days;
+        row.name = name;
+        row.error = null;
+      } catch (e) {
+        row.error = e.message.length > 30 ? 'não encontrado' : e.message;
+      } finally {
+        row.loading = false;
+        done++;
+        progBar.style.width = `${(done / TICKERS.length) * 100}%`;
+        renderRows();
+        await sleep(120);
+      }
+    }
+
+    document.getElementById('lastUpdated').textContent =
+      'Atualizado: ' + new Date().toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
+    btn.disabled = false;
+    setTimeout(() => { progWrap.classList.remove('visible'); }, 800);
+  }
+
+  function sortTable(col) {
+    if (sortCol === col) {
+      sortAsc = !sortAsc;
+    } else {
+      sortCol = col;
+      sortAsc = col === 'ticker' ? true : true;
+    }
+
+    document.querySelectorAll('th').forEach(th => {
+      th.classList.remove('sorted');
+      th.querySelector('.sort-icon').textContent = '↕';
+    });
+
+    const th = document.querySelector(`th[data-col="${col}"]`);
+    th.classList.add('sorted');
+    th.querySelector('.sort-icon').textContent = sortAsc ? '↑' : '↓';
+
+    renderRows();
+  }
+
+  loadAll();
+</script>
+</body>
+</html>
