@@ -1,0 +1,88 @@
+# ==========================================================================
+# Atacaderj-Cotacao-Loop — .gitignore
+# Node + sistemas operacionais (Windows/macOS) + segredos.
+#
+# A biblioteca/ (apelidos.json, buscas.json, ausentes.json, correcoes.jsonl) e
+# as metricas/ SAO versionadas de proposito — sao o conhecimento do loop.
+# NAO as ignore.
+# ==========================================================================
+
+# --------------------------------------------------------------------------
+# Node
+# --------------------------------------------------------------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+.pnpm-store/
+.npm/
+.yarn/
+.node_repl_history
+*.tsbuildinfo
+.eslintcache
+coverage/
+.nyc_output/
+
+# Saidas/temporarios de benchmark e medicao (mantenha apenas os arquivos
+# canonicos versionados; ignore dumps locais)
+benchmark/saida/
+benchmark/*.local.json
+benchmark/*.tmp.*
+*.local.jsonl
+
+# --------------------------------------------------------------------------
+# Segredos e credenciais (NUNCA commitar)
+# O app chama a API sem x-api-key no repo; nenhum segredo deve existir aqui.
+# --------------------------------------------------------------------------
+.env
+.env.*
+!.env.example
+*.local
+secrets.json
+*.key
+*.pem
+*.pfx
+*.p12
+ANTHROPIC_API_KEY*
+.anthropic
+auth.json
+credentials.json
+
+# --------------------------------------------------------------------------
+# Windows
+# --------------------------------------------------------------------------
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+*.stackdump
+
+# --------------------------------------------------------------------------
+# macOS
+# --------------------------------------------------------------------------
+.DS_Store
+.DS_Store?
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+.fseventsd
+.VolumeIcon.icns
+.DocumentRevisions-V100
+.TemporaryItems
+
+# --------------------------------------------------------------------------
+# Editores / IDEs
+# --------------------------------------------------------------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.sublime-workspace

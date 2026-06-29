@@ -1,0 +1,87 @@
+# .github/workflows/validar.yml
+#
+# GATE de cada rodada da Cotacao IA (Atacaderj).
+#
+# Roda em PULL REQUEST e em PUSH. Valida a BIBLIOTECA de aprendizado
+# (apelidos/ausentes/correcoes) e roda o benchmark em MODO ESTATICO — so com
+# os dados ja commitados, SEM chamar a API da Anthropic e SEM nenhum segredo.
+#
+# Se a biblioteca estiver inconsistente, o validador sai com codigo != 0 e o
+# check FALHA — o GitHub bloqueia o merge do PR. Assim, nenhuma rodada e aberta
+# em cima de uma biblioteca corrompida (apelido orfao, termo duplicado, JSONL
+# quebrado), o que protegeria os 3 eixos: qualidade (match certo), velocidade
+# (cache/reuso intactos) e tokens (sem reprocessar lixo).
+
+name: validar-biblioteca
+
+# Sem segredos: este workflow nunca toca a rede/API. So precisa ler o codigo.
+permissions:
+  contents: read
+
+on:
+  pull_request:
+    branches: ['**']
+  push:
+    branches: ['**']
+
+# Cancela execucoes antigas do mesmo branch/PR para nao desperdicar minutos.
+concurrency:
+  group: validar-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validar:
+    name: Valida biblioteca + benchmark estatico
+    runs-on: ubuntu-latest
+
+    # O Action precisa ficar na raiz (.github/workflows), mas todo o codigo do
+    # projeto de cotacao vive em cotacao/. Rodamos os passos `run:` a partir dali.
+    defaults:
+      run:
+        working-directory: cotacao
+
+    steps:
+      - name: Checkout do repositorio
+        uses: actions/checkout@v4
+
+      - name: Instalar Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Mostrar versao do Node
+        run: node --version
+
+      # -------------------------------------------------------------------
+      # GATE 1 — Validacao da biblioteca (BLOQUEANTE).
+      # Sai != 0 se houver schema errado, termo de apelido duplicado,
+      # apelido apontando para codigo inexistente, ou correcoes.jsonl
+      # com linha invalida. Falhar aqui derruba o check e barra o merge.
+      # -------------------------------------------------------------------
+      - name: Validar biblioteca (apelidos / ausentes / correcoes)
+        run: node ferramentas/validar-biblioteca.mjs biblioteca
+
+      # -------------------------------------------------------------------
+      # GATE 2 — Benchmark em MODO ESTATICO (BLOQUEANTE quando existir).
+      # benchmark/avaliar.mjs avalia a qualidade do match usando SO os
+      # casos-ouro e a biblioteca commitados — sem API, sem segredos.
+      # A flag --estatico garante que ele nunca tente chamar a Anthropic
+      # no CI. Se o arquivo ainda nao existe no repo, o passo apenas avisa
+      # e segue (nao mascara falha — quando o benchmark existir, ele roda
+      # e pode reprovar o PR).
+      # -------------------------------------------------------------------
+      - name: Gate de nao-regressao (roda quando a rodada commitar resultados)
+        run: |
+          if [ -f benchmark/ultima-rodada.json ]; then
+            echo "benchmark/ultima-rodada.json encontrado — rodando o gate dos 3 eixos."
+            node benchmark/avaliar.mjs benchmark/ultima-rodada.json --golden benchmark/golden-set.exemplo.jsonl
+          else
+            echo "::notice title=benchmark::Sem benchmark/ultima-rodada.json — o gate dos 3 eixos roda LOCALMENTE na rodada (precisa dos 'previstos' reais da execucao). A validacao da biblioteca acima ja passou."
+          fi
+
+      - name: Resumo
+        if: always()
+        run: |
+          echo "Validacao concluida. Se este check ficou VERDE, a biblioteca esta consistente"
+          echo "e a rodada pode ser aberta com seguranca. Se ficou VERMELHO, leia o log do"
+          echo "passo que falhou acima — o merge fica bloqueado ate corrigir."

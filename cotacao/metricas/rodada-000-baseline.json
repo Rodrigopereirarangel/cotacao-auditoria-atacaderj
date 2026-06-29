@@ -1,0 +1,33 @@
+{
+  "rodada": 0,
+  "data": "2026-06-29T00:00:00-03:00",
+  "commit": "-",
+  "descricao_mudancas": "Baseline do app atual (cotacao_ia_oficial.html, ~615KB, arquivo unico). Pipeline: separar (separarIA, sonnet-4-6) -> interpretar itens fracos (interpretarLote, sonnet-4-6, LIMIAR_INTERP=4) -> filtro local (candidatosDoItem: filtroLocal + candidatosFuzzy/TRIG_INDEX) -> busca em lote (buscaSemanticaLote, haiku-4-5, LOTE_BUSCA=15) -> confirmacao do usuario -> fallback catalogo inteiro (buscaCatalogoInteiro, sonnet-4-6, CATALOG_BLOCK de ~4427 produtos cacheado, cache_control ephemeral ttl 1h, 1 req/item serializada) -> aprende apelido. OCR de imagem: MODELO_LEITURA=sonnet-4-6, N_LEITURAS=3 + consolidarLeituras. Nenhuma alteracao aplicada.",
+  "eixo_alvo": "baseline",
+  "alavanca": "-",
+  "golden_set": "golden-v1",
+  "n_cotacoes": 30,
+  "baseline_ref": "-",
+  "veredito": "baseline",
+  "baseline_a_confirmar": true,
+  "observacoes": "VALORES ESTIMADOS, NAO MEDIDOS. Estimativas plausiveis para uma cotacao tipica de ~30 itens digitados (sem OCR). Premissas: maioria dos itens resolve no lote haiku (LOTE_BUSCA=15 -> ~2 lotes/cotacao); 1 chamada de separarIA; interpretarLote so em itens fracos; ~3-5 itens caem no fallback catalogo inteiro (sonnet, serializado), que e o que mais infla p95 e tokens. cache_hit_rate depende do CATALOG_BLOCK (~4427 produtos) ficar quente entre itens do fallback (ttl 1h). CONFIRMAR com medicao real (golden-v1, 3 rodadas, media) antes de validar a rodada 001. Se houver OCR (N_LEITURAS=3, sonnet), somar ~4 requisicoes e tokens de imagem por lista manuscrita.",
+  "velocidade": {
+    "requisicoes_por_cotacao": 8.5,
+    "latencia_ms_p50": 9000,
+    "latencia_ms_p95": 26000,
+    "cache_hit_rate": 0.55
+  },
+  "tokens": {
+    "input": 42000,
+    "output": 5200,
+    "cache_read": 210000,
+    "total_por_cotacao": 257200
+  },
+  "qualidade": {
+    "precisao": 92.0,
+    "recall": 86.0,
+    "acertos": 26,
+    "total": 30,
+    "erros_corrigidos": 4
+  }
+}

@@ -1,0 +1,10 @@
+{"pedido": "ariel liq 3l", "codigos_esperados": [10231], "observacao": "Abreviacao: 'liq'=liquido. Sabao liquido Ariel 3 litros. Codigo placeholder."}
+{"pedido": "leite moca cx", "codigos_esperados": [10544], "observacao": "Apelido de marca 'leite moca' = leite condensado Nestle; 'cx'=caixinha (tetrapak). Codigo placeholder."}
+{"pedido": "bombril", "codigos_esperados": [10877, 10878], "observacao": "Marca usada como categoria: la de aco. Pode mapear para mais de um SKU (un e fardo). Codigos placeholder."}
+{"pedido": "coca 2l fardo", "codigos_esperados": [10102], "observacao": "'coca'=Coca-Cola; '2l fardo'=fardo de garrafas 2 litros. Codigo placeholder."}
+{"pedido": "sabao em po omo 1,6", "codigos_esperados": [10455], "observacao": "Erro de digitacao/forma livre; '1,6'=1,6kg. Codigo placeholder."}
+{"pedido": "oleo soja liza", "codigos_esperados": [10620], "observacao": "Marca 'Liza'; oleo de soja 900ml. Codigo placeholder."}
+{"pedido": "arrox tio joao 5kg", "codigos_esperados": [10001], "observacao": "Erro de digitacao real: 'arrox'=arroz. Tio Joao 5kg. Testa robustez a typo. Codigo placeholder."}
+{"pedido": "amaciante downy 12x", "codigos_esperados": [10733], "observacao": "'amaciante' abreviado as vezes como 'amac'; '12x' indica fardo. Marca Downy. Codigo placeholder."}
+{"pedido": "papel hig neve fd 64", "codigos_esperados": [10980], "observacao": "'papel hig'=papel higienico; 'neve'=marca; 'fd 64'=fardo com 64 rolos. Codigo placeholder."}
+{"pedido": "acucar uniao", "codigos_esperados": [], "observacao": "SEM GABARITO confiavel (varios SKUs cristal/refinado). codigos_esperados vazio => excluido da agregacao de qualidade."}

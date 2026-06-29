@@ -1,0 +1,8 @@
+{
+  "_comentario": "FILA PRIORITARIA DE MELHORIA DE QUALIDADE. Cada string em 'itens' e um termo (no formato chaveBusca: minusculo/sem acento/espaco simples) que NEM o fallback do catalogo inteiro (buscaCatalogoInteiro, sonnet com catalogo cacheado) conseguiu casar. E recall=0: o sistema nao atendeu a cotacao de jeito nenhum. Enquanto o termo estiver aqui (mesma versao_catalogo) o app NAO reabre o fallback caro para ele (cache negativo), entao a unica saida e curadoria humana: criar um apelido em apelidos.json, corrigir/enriquecer a descricao no catalogo, ou constatar que o produto realmente nao existe. Resolver cada item aqui e o trabalho de maior impacto direto no eixo QUALIDADE.",
+  "versao_catalogo": null,
+  "itens": [
+    "absorvente noturno xpto",
+    "detergente neutro 5l marca z"
+  ]
+}

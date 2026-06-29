@@ -1,3 +1,27 @@
+# --- Node (ferramentas/benchmark do cotacao) ---
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# --- Python (pricing pode adicionar codigo depois) ---
 __pycache__/
 *.pyc
 .streamlit/
+.venv/
+venv/
+
+# --- Sistema operacional ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Segredos (este projeto NUNCA versiona chave/API) ---
+.env
+.env.*
+*.key
+*.pem
+secrets*.json
+
+# --- Temporarios ---
+*.tmp
+*.log

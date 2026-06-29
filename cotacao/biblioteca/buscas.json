@@ -1,0 +1,29 @@
+{
+  "versao_catalogo": null,
+  "entradas": [
+    [
+      "leite condensado",
+      [
+        {
+          "nome": "leite condensado",
+          "produtos": [
+            { "c": 12345, "p": "LEITE COND ITALAC 395G", "q": 1, "v": 6.49 },
+            { "c": 12346, "p": "LEITE COND MOCA 395G", "q": 1, "v": 8.29 }
+          ]
+        }
+      ]
+    ],
+    [
+      "sabao em po",
+      [
+        {
+          "nome": "sabao em po",
+          "produtos": [
+            { "c": 40021, "p": "SABAO PO OMO 800G", "q": 1, "v": 11.90 },
+            { "c": 40022, "p": "SABAO PO BRILHANTE 800G", "q": 1, "v": 9.49 }
+          ]
+        }
+      ]
+    ]
+  ]
+}

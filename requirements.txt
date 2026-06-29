@@ -1,4 +1,0 @@
-pandas>=2.0
-plotly>=5.14
-yfinance>=0.2
-streamlit>=1.29
