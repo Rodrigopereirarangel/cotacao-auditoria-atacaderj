@@ -56,6 +56,14 @@ body{font-family:"Inter Variable","Inter","Segoe UI Variable","Segoe UI",system-
 .appbar-btn{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 13px;border:1px solid var(--line);border-radius:20px;background:var(--surface);color:var(--text-dim);font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;transition:border-color var(--ease),color var(--ease),background var(--ease);box-shadow:var(--shadow-sm);white-space:nowrap}
 .appbar-btn:hover{border-color:var(--navy);color:var(--navy);background:var(--surface-2)}
 .appbar-btn svg{opacity:.85}
+.steps{display:flex;align-items:center;gap:10px;margin:0 4px 1.1rem;font-size:12.5px;font-weight:600;color:var(--text-faint);user-select:none;flex-wrap:wrap}
+.step{display:inline-flex;align-items:center;gap:7px;transition:color var(--ease)}
+.step-n{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--surface);border:1.5px solid var(--line);color:var(--text-faint);font-size:12px;font-weight:700;transition:all var(--ease);flex-shrink:0}
+.step-sep{flex:1;height:2px;background:var(--line);border-radius:2px;min-width:16px;max-width:54px}
+.step.s1,.wrap:has(#statusBar:not([style*="none"])) .step.s2,.wrap:has(#results:not(:empty)) .step.s3{color:var(--navy)}
+.step.s1 .step-n,.wrap:has(#statusBar:not([style*="none"])) .step.s2 .step-n,.wrap:has(#results:not(:empty)) .step.s3 .step-n{background:var(--navy);border-color:var(--navy);color:#fff;box-shadow:0 2px 7px rgba(13,51,100,.25)}
+.wrap:has(#statusBar:not([style*="none"])) .step.s1,.wrap:has(#results:not(:empty)) .step.s1,.wrap:has(#results:not(:empty)) .step.s2{color:var(--green)}
+.wrap:has(#statusBar:not([style*="none"])) .step.s1 .step-n,.wrap:has(#results:not(:empty)) .step.s1 .step-n,.wrap:has(#results:not(:empty)) .step.s2 .step-n{background:var(--green);border-color:var(--green);color:#fff;box-shadow:none}
 
 .card{background:var(--surface);border-radius:var(--radius);border:1px solid #dde4ee;padding:14px 16px;box-shadow:0 1px 2px rgba(13,40,82,.06),0 4px 14px rgba(13,40,82,.08)}
 .input-row{display:flex;gap:10px;align-items:center}
@@ -65,7 +73,9 @@ body{font-family:"Inter Variable","Inter","Segoe UI Variable","Segoe UI",system-
 .btn-go{padding:0 24px;background:linear-gradient(150deg,#1a5bb8,#0D3364 75%);color:#fff;border:none;border-radius:var(--radius-sm);font-size:14px;font-weight:700;letter-spacing:.2px;cursor:pointer;height:44px;align-self:flex-end;white-space:nowrap;transition:transform var(--ease),box-shadow var(--ease),opacity var(--ease);box-shadow:0 2px 8px rgba(13,51,100,.25)}
 .btn-go:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(13,51,100,.32)}
 .btn-go:active{transform:translateY(0)}
-.btn-go:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+.btn-go:disabled{opacity:.9;cursor:wait;transform:none;box-shadow:none}
+.btn-go:disabled svg{display:none}
+.btn-go:disabled::before{content:"";display:inline-block;width:15px;height:15px;border:2px solid rgba(255,255,255,.45);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:-3px;margin-right:3px}
 .hint{font-size:12px;color:var(--text-faint);margin-bottom:.75rem}
 .status-bar{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--info-bg);border-radius:var(--radius-sm);margin-bottom:1rem;font-size:13px;font-weight:500;color:var(--navy);border:1px solid var(--info-bd);border-left:3px solid var(--orange);position:sticky;top:8px;z-index:40;box-shadow:0 4px 14px rgba(16,40,80,.10)}
 .spinner{width:16px;height:16px;border:2px solid var(--orange-bg);border-top-color:var(--orange-2);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
@@ -237,6 +247,13 @@ html{scroll-behavior:smooth}
     <div class="appbar-spacer"></div>
     <button class="appbar-btn" id="btnCatalogo" onclick="abrirAtualizarCatalogo()" title="Atualizar catálogo de produtos (planilhas atacado + varejo)" aria-label="Atualizar catálogo"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><path d="M3.27 6.96L12 12.01l8.73-5.05"></path><path d="M12 22.08V12"></path></svg> Catálogo</button>
   </header>
+  <nav class="steps" aria-label="Etapas da cotação">
+    <span class="step s1"><span class="step-n">1</span> Lista</span>
+    <span class="step-sep"></span>
+    <span class="step s2"><span class="step-n">2</span> Buscar</span>
+    <span class="step-sep"></span>
+    <span class="step s3"><span class="step-n">3</span> Resultados</span>
+  </nav>
   <div class="card" style="margin-bottom:1rem" id="cardTopo">
     <div class="card-label">O que você quer cotar?</div>
     <div class="input-row">
@@ -275,7 +292,7 @@ html{scroll-behavior:smooth}
     </div>
   </div>
 
-  <div id="statusBar" style="display:none" class="status-bar">
+  <div id="statusBar" style="display:none" class="status-bar" role="status" aria-live="polite">
     <div class="spinner" aria-hidden="true"></div>
     <span id="statusMsg" style="flex-shrink:0">Aguarde...</span>
     <div class="prog-wrap" id="progWrap" style="display:none"><div class="prog-fill" id="progFill"></div></div>
