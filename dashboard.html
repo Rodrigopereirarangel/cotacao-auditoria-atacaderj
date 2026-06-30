@@ -35,13 +35,16 @@ th{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--dim)}
   <div class="card"><h3>Velocidade (requisicoes / cache-hit)</h3><canvas id="cV"></canvas></div>
   <div class="card"><h3>Biblioteca (estado atual)</h3><canvas id="cB"></canvas></div>
 </div>
+<h2 id="usoTit" style="font-size:16px;color:var(--navy);margin:22px 0 10px">Uso real (operador) <span style="font-size:12px;color:var(--dim);font-weight:400" id="usoSub"></span></h2>
+<div class="kpis" id="usoKpis"></div>
+<div class="card"><h3>Tempo por cotacao (s) e por item (ms) — ultimas cotacoes</h3><canvas id="cUso"></canvas></div>
 <div class="card" style="margin-top:14px"><h3>Rodadas</h3><table id="tab"><thead><tr><th>#</th><th>Data</th><th>Alvo</th><th>Veredito</th><th>Prec.</th><th>Recall</th><th>Errados</th><th>Tokens/cot</th><th>Tempo</th></tr></thead><tbody></tbody></table></div>
 <div class="aviso" id="aviso"></div>
 </div>
-<script>var D={"rodadas":[{"n":0,"data":"2026-06-29T00:00:00-03:00","veredito":"baseline","eixo":"baseline","estimado":true,"precisao":92,"recall":86,"tokens":257200,"req":8.5,"cache":0.55,"errados":4,"itens":30,"cotados":null,"sem_match":null,"fallbacks":null,"tempo_total_ms":null,"tempo_item_ms":null}],"biblioteca":{"apelidos":3,"buscas":2,"ausentes":2,"correcoes":2,"apelido_motivos":0}};</script>
+<script>var D={"rodadas":[{"n":0,"data":"2026-06-29T00:00:00-03:00","veredito":"baseline","eixo":"baseline","estimado":true,"precisao":92,"recall":86,"tokens":257200,"req":8.5,"cache":0.55,"errados":4,"itens":30,"cotados":null,"sem_match":null,"fallbacks":null,"tempo_total_ms":null,"tempo_item_ms":null}],"biblioteca":{"apelidos":3,"buscas":2,"ausentes":2,"correcoes":2,"apelido_motivos":0},"uso":null};</script>
 <script>
 (function(){
-  var R=D.rodadas||[]; var labels=R.map(function(r){return 'R'+r.n;});
+  var R=D.rodadas||[]; var labels=R.map(function(r){return 'R'+r.n;}); var US=D.uso;
   var u=R.length?R[R.length-1]:null, b0=R.length?R[0]:null;
   function f(x,d){return x==null?'-':Number(x).toFixed(d==null?0:d);}
   function ms(x){return x==null?null:Math.round(x);} function seg(x){return x==null?'-':(x/1000).toFixed(1)+'s';}
@@ -53,9 +56,9 @@ th{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--dim)}
   var k=document.getElementById('kpis');function kpi(l,v,medir){var d=document.createElement('div');d.className='kpi'+(medir?' medir':'');d.innerHTML='<div class="lbl">'+l+'</div><div class="val">'+v+'</div>';k.appendChild(d);}
   if(u){
     kpi('Qualidade (P/R)', f(u.precisao,1)+'<small>% / '+f(u.recall,1)+'%</small>');
-    kpi('Itens errados', u.errados==null?'a medir':f(u.errados), u.errados==null);
-    kpi('Tempo da cotacao', u.tempo_total_ms==null?'a medir':seg(u.tempo_total_ms), u.tempo_total_ms==null);
-    kpi('Tempo medio/item', u.tempo_item_ms==null?'a medir':(Math.round(u.tempo_item_ms)+'ms'), u.tempo_item_ms==null);
+    kpi('Itens sem match', US?(f(US.sem_match_taxa*100,1)+'<small>%</small>'):'a medir', !US);
+    kpi('Tempo da cotacao', US?seg(US.tempo_medio_cotacao_ms):'a medir', !US);
+    kpi('Tempo medio/item', US?(Math.round(US.tempo_medio_item_ms)+'ms'):'a medir', !US);
     kpi('Tokens / cotacao', f(u.tokens));
     kpi('Req / cotacao', f(u.req,1));
     kpi('Cache-hit', f((u.cache||0)*100,1)+'<small>%</small>');
@@ -75,6 +78,24 @@ th{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--dim)}
   new Chart(document.getElementById('cB'),{type:'bar',data:{labels:['Apelidos','Buscas','Ausentes','Correcoes','Motivos IA'],datasets:[{label:'itens',data:[D.biblioteca.apelidos,D.biblioteca.buscas,D.biblioteca.ausentes,D.biblioteca.correcoes,D.biblioteca.apelido_motivos],backgroundColor:[navy,'#2f74c4',orange,green,'#9a5a00']}]},options:{plugins:{legend:{display:false}}}});
   var tb=document.querySelector('#tab tbody');
   R.forEach(function(r){var tr=document.createElement('tr');tr.innerHTML='<td>R'+r.n+'</td><td>'+(r.data||'').slice(0,10)+'</td><td>'+r.eixo+'</td><td>'+r.veredito+'</td><td>'+f(r.precisao,1)+'%</td><td>'+f(r.recall,1)+'%</td><td>'+(r.errados==null?'-':r.errados)+'</td><td>'+f(r.tokens)+'</td><td>'+seg(r.tempo_total_ms)+'</td>';tb.appendChild(tr);});
-  document.getElementById('aviso').innerHTML='Gerado por <b>ferramentas/gerar-dashboard.mjs</b> (npm run dashboard). Metricas com tag "a medir" precisam de instrumentacao no app (timestamps+contadores) — pecam pro dev habilitar.';
+  // Uso real (operador) — do snapshot
+  var uk=document.getElementById('usoKpis');function ukpi(l,v){var d=document.createElement('div');d.className='kpi';d.innerHTML='<div class="lbl">'+l+'</div><div class="val">'+v+'</div>';uk.appendChild(d);}
+  if(US){
+    document.getElementById('usoSub').textContent='— '+US.n+' cotacoes registradas'+(US.atualizado?(' · '+US.atualizado.slice(0,10)):'');
+    ukpi('Cotacoes', US.n);
+    ukpi('Tempo medio/cotacao', seg(US.tempo_medio_cotacao_ms));
+    ukpi('Tempo medio/item', Math.round(US.tempo_medio_item_ms)+'ms');
+    ukpi('Itens/cotacao', f(US.itens_por_cotacao,1));
+    ukpi('Sem match', f(US.sem_match_taxa*100,1)+'<small>%</small>');
+    ukpi('Erros tecnicos', f(US.erros_taxa*100,1)+'<small>%</small>');
+    ukpi('Itens corrigidos', US.corrigidos_taxa==null?'-':(f(US.corrigidos_taxa*100,1)+'<small>%</small>'));
+    var A=US.amostras||[];var al=A.map(function(a,i){return (a.d?a.d.slice(5,10):('#'+(i+1)));});
+    new Chart(document.getElementById('cUso'),{type:'line',data:{labels:al,datasets:[{label:'Cotacao (s)',data:A.map(function(a){return a.t/1000;}),borderColor:navy,backgroundColor:navy,yAxisID:'y'},{label:'Por item (ms)',data:A.map(function(a){return a.itens?Math.round(a.t/a.itens):null;}),borderColor:orange,backgroundColor:orange,yAxisID:'y1'}]},options:{plugins:{legend:{position:'bottom'}},scales:{y:{position:'left',title:{display:true,text:'s'}},y1:{position:'right',grid:{drawOnChartArea:false},title:{display:true,text:'ms'}}}}});
+  } else {
+    document.getElementById('usoSub').textContent='— sem snapshot do operador ainda';
+    uk.innerHTML='<div class="kpi medir" style="grid-column:1/-1"><div class="val">Aguardando o primeiro snapshot do operador. Assim que ele cotar e o sync subir o atacaderj-biblioteca.json pro GitHub (com o campo metricas), os numeros reais aparecem aqui. Rode: npm run dashboard.</div></div>';
+    document.getElementById('cUso').closest('.card').style.display='none';
+  }
+  document.getElementById('aviso').innerHTML='Gerado por <b>ferramentas/gerar-dashboard.mjs</b> (npm run dashboard). Os KPIs operacionais (tempo, sem match, corrigidos) vem do <b>uso real do operador</b> via snapshot; sem snapshot ainda, aparecem como "a medir".';
 })();
 </script></body></html>
