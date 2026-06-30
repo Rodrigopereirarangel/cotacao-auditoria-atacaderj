@@ -34,12 +34,6 @@ jobs:
     name: Valida biblioteca + benchmark estatico
     runs-on: ubuntu-latest
 
-    # O Action precisa ficar na raiz (.github/workflows), mas todo o codigo do
-    # projeto de cotacao vive em cotacao/. Rodamos os passos `run:` a partir dali.
-    defaults:
-      run:
-        working-directory: cotacao
-
     steps:
       - name: Checkout do repositorio
         uses: actions/checkout@v4
