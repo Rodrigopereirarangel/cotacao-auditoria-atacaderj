@@ -9,7 +9,7 @@
     "selar:check": "node ferramentas/selar-app.mjs app/cotacao_ia_oficial.html --check",
     "evolucao": "node ferramentas/evolucao.mjs",
     "dashboard": "node ferramentas/gerar-dashboard.mjs",
-    "mesclar": "node ferramentas/mesclar-snapshot.mjs biblioteca",
+    "mesclar": "node ferramentas/mesclar-snapshot.mjs biblioteca && node ferramentas/gerar-dashboard.mjs",
     "proxy": "node ferramentas/proxy-teste/servir.mjs"
   },
   "devDependencies": {
