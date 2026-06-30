@@ -23,15 +23,21 @@ do backlog.
   a partir do comportamento do app). **A Rodada 1 comeca confirmando-os com
   medicao real** antes de qualquer comparacao de gate.
 
-## [ ] Rodada 1 — Confirmar baseline real + cache warming seguro
+## [~] Rodada 1 — Cache warming seguro (PR aberto)
 
-- **Pre-requisito:** medir o baseline real (Etapa 2 do checklist) e marcar
-  `baseline_a_confirmar=false` em `rodada-000-baseline.json`.
+- **Estado:** PR aberto no branch `rodada-1-cutucar-max-tokens-0`. Mudanca aplicada
+  no app (`cutucarCache`: `max_tokens:1` -> `max_tokens:0`). Metrica em
+  [`metricas/rodada-001-cutucar-max-tokens-0.json`](metricas/rodada-001-cutucar-max-tokens-0.json),
+  `veredito="aceita-por-construcao"`.
 - **Backlog:** item 1 — `cutucarCache` trocar `max_tokens:1` por `max_tokens:0`
   **[GANHO SEGURO]**.
-- **Eixo-alvo:** tokens (zera o output do cutucao). Em risco: nenhum.
-- **Gate:** qualidade e velocidade inalteradas; tokens caem. Reverter e inocuo se
-  o proxy nao aceitar `max_tokens:0`.
+- **Eixo-alvo:** tokens (zera o output do cutucao). Em risco: nenhum (nao toca o
+  caminho de busca/match — qualidade e velocidade byte-identicas ao baseline).
+- **Pendente antes do merge (manual):** medir o baseline real (Etapa 2 do
+  checklist) e marcar `baseline_a_confirmar=false` em `rodada-000-baseline.json`;
+  com o app servido, confirmar no Console que o cutucao roda sem erro e que o
+  `output_tokens` do warm = 0. Reverter e inocuo se o proxy nao aceitar
+  `max_tokens:0`.
 
 ## [ ] Rodada 2 — Estabilidade do prefixo do catalogo
 
