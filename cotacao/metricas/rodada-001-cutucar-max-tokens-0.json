@@ -1,0 +1,34 @@
+{
+  "rodada": 1,
+  "data": "2026-06-29T00:00:00-03:00",
+  "commit": "(preenchido no merge do PR)",
+  "descricao_mudancas": "Item 1 do backlog [GANHO SEGURO]: em cutucarCache (linha ~4825), troca max_tokens:1 por max_tokens:0. cutucarCache e o pre-aquecedor periodico do cache: envia o CATALOG_BLOCK (cache_control ephemeral ttl 1h) so para manter o prefixo quente. Nao faz parte do caminho de busca/match de nenhuma cotacao. Com max_tokens:0 a API faz o prefill (grava o cache no breakpoint) e retorna sem gerar token de saida; com max_tokens:1 gerava 1 token inutil por cutucao.",
+  "eixo_alvo": "tokens",
+  "alavanca": "cutucarCache max_tokens:0 (cache warming idiomatico)",
+  "golden_set": "golden-v1",
+  "n_cotacoes": 30,
+  "baseline_ref": "rodada-000-baseline.json",
+  "veredito": "aceita-por-construcao",
+  "baseline_a_confirmar": true,
+  "observacoes": "GATE POR CONSTRUCAO (sem regressao possivel nos 3 eixos): (1) QUALIDADE inalterada — a mudanca nao toca separarIA/interpretarLote/buscaSemanticaLote/buscaCatalogoInteiro nem o filtro local; o caminho de busca e byte-identico, logo precisao/recall herdam o baseline. (2) TOKENS estritamente <= — remove o unico token de output de cada cutucao (output do warm: 1 -> 0); o cache_read/creation do prefixo e identico. (3) VELOCIDADE >= — uma resposta sem geracao de token retorna no mesmo tempo ou um hair mais rapido. Reversao inocua: se a sessao/proxy rejeitar max_tokens:0, volta para 1 sem efeito colateral. PENDENTE (manual): confirmar o baseline real (rodar golden-v1 3x e marcar baseline_a_confirmar=false) e, com o app servido, abrir o Console e checar que cutucarCache loga o cutucao sem erro e que data.usage.output_tokens do warm = 0. Os campos numericos abaixo sao HERDADOS do baseline (inalterados por construcao), exceto tokens.output que cai marginalmente no caminho do warm (nao medido por cotacao porque o cutucao e periodico, fora da cotacao).",
+  "velocidade": {
+    "requisicoes_por_cotacao": 8.5,
+    "latencia_ms_p50": 9000,
+    "latencia_ms_p95": 26000,
+    "cache_hit_rate": 0.55
+  },
+  "tokens": {
+    "input": 42000,
+    "output": 5200,
+    "cache_read": 210000,
+    "total_por_cotacao": 257200,
+    "nota": "output do caminho de cutucarCache: 1 -> 0 por cutucao (fora da cotacao). total_por_cotacao inalterado."
+  },
+  "qualidade": {
+    "precisao": 92.0,
+    "recall": 86.0,
+    "acertos": 26,
+    "total": 30,
+    "erros_corrigidos": 4
+  }
+}
