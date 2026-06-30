@@ -9,7 +9,12 @@ $TOKEN = 'github_pat_COLE_SEU_TOKEN_AQUI'
 # ============================================================================
 
 $ErrorActionPreference = 'Stop'
-if ($TOKEN -notmatch '^github_pat_|^ghp_') { Write-Host 'ERRO: edite a linha $TOKEN com seu token do GitHub antes de rodar.' -ForegroundColor Red; return }
+# Se voce nao editou a linha do TOKEN acima, ele pergunta agora (digitacao escondida):
+if ($TOKEN -notmatch '^github_pat_|^ghp_') {
+  $sec = Read-Host 'Cole o token do GitHub (fino, Contents:write, so este repo) e tecle Enter' -AsSecureString
+  $TOKEN = [System.Net.NetworkCredential]::new('', $sec).Password
+}
+if ($TOKEN -notmatch '^github_pat_|^ghp_') { Write-Host 'Token invalido ou vazio. Cancelado.' -ForegroundColor Red; return }
 
 $dir = Join-Path $env:LOCALAPPDATA 'AtacaderjSync'
 New-Item -ItemType Directory -Force $dir | Out-Null
