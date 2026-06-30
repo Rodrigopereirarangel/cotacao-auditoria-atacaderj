@@ -14,7 +14,7 @@ export function descMaxFrac(base, custo, cv) {
   const mk = (base - custo) / custo;
   const dm = 1 - (1 + PISO) / (1 + mk);
   const teto = (cv === 'A') ? 0.03 : 0.05;
-  return Math.min(Math.abs(dm), teto);
+  return Math.max(0, Math.min(dm, teto));
 }
 
 export function regraBind(base, custo, cv) {

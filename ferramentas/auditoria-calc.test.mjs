@@ -12,7 +12,8 @@ assert.equal(descMaxFrac(10, 5, undefined), 0.05);   // teto demais 5%
 assert.equal(descMaxFrac(10, 5, 'A'), 0.03);          // teto A 3%
 assert.equal(descMaxFrac(10, null, undefined), 0);
 assert.equal(descMaxFrac(10, 0, undefined), 0);
-const d = descMaxFrac(10, 9.5, undefined);            // markup ~5.3% -> piso manda
+assert.equal(descMaxFrac(10, 9.5, undefined), 0);     // markup 5.3% já abaixo do piso 10% -> sem desconto
+const d = descMaxFrac(10, 9, undefined);              // markup 11.1% -> piso permite desconto pequeno
 assert.ok(d > 0 && d < 0.05);
 
 // regraBind
