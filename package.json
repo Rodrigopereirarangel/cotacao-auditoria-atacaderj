@@ -8,6 +8,7 @@
     "selar": "node ferramentas/selar-app.mjs app/cotacao_ia_oficial.html",
     "selar:check": "node ferramentas/selar-app.mjs app/cotacao_ia_oficial.html --check",
     "evolucao": "node ferramentas/evolucao.mjs",
+    "mesclar": "node ferramentas/mesclar-snapshot.mjs biblioteca",
     "proxy": "node ferramentas/proxy-teste/servir.mjs"
   },
   "devDependencies": {
