@@ -20,6 +20,18 @@ th{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--dim)}
 .banner{padding:12px 16px;border-radius:10px;margin-bottom:16px;font-weight:600;font-size:13.5px}
 .banner.ok{background:#e7f5ec;border:1px solid #bfe3cb;color:var(--green)}.banner.warn{background:#fdecec;border:1px solid #f3c9c4;color:var(--red)}
 .aviso{font-size:12px;color:var(--dim);margin-top:16px}
+.kpi{cursor:pointer;transition:transform .12s,box-shadow .12s,border-color .12s;position:relative}
+.kpi:hover{transform:translateY(-2px);border-color:var(--orange);box-shadow:0 8px 20px rgba(13,40,82,.13)}
+.kpi.medir{cursor:default}.kpi.medir:hover{transform:none;border-color:var(--line);box-shadow:0 4px 14px rgba(13,40,82,.06)}
+.kpi .hint{font-size:9.5px;color:var(--orange);font-weight:700;margin-top:6px;letter-spacing:.3px}
+.kpi.medir .hint{display:none}
+.modal{position:fixed;inset:0;background:rgba(13,40,82,.55);display:none;align-items:center;justify-content:center;z-index:5000;padding:20px}
+.modal.show{display:flex}
+.modal .box{background:var(--surface);border-radius:14px;padding:20px 22px;width:min(760px,94vw);box-shadow:0 24px 70px rgba(0,0,0,.35)}
+.modal .box h3{font-size:17px;color:var(--navy);margin:0 30px 2px 0}
+.modal .box .msub{font-size:12px;color:var(--dim);margin-bottom:14px}
+.modal .x{position:absolute;margin:-4px 0 0 0;cursor:pointer;font-size:24px;color:var(--dim);line-height:1;border:none;background:none;float:right}
+.modal .box{position:relative}.modal .x{position:absolute;top:16px;right:18px}
 @media(max-width:720px){.grid{grid-template-columns:1fr}}
 </style></head>
 <body><div class="wrap">
@@ -41,6 +53,7 @@ th{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--dim)}
 <div class="card" style="margin-top:14px"><h3>Rodadas</h3><table id="tab"><thead><tr><th>#</th><th>Data</th><th>Alvo</th><th>Veredito</th><th>Prec.</th><th>Recall</th><th>Errados</th><th>Tokens/cot</th><th>Tempo</th></tr></thead><tbody></tbody></table></div>
 <div class="aviso" id="aviso"></div>
 </div>
+<div class="modal" id="modal"><div class="box"><button class="x" id="mX">&times;</button><h3 id="mTit"></h3><div class="msub" id="mSub"></div><canvas id="cModal"></canvas></div></div>
 <script>var D={"rodadas":[{"n":0,"data":"2026-06-29T00:00:00-03:00","veredito":"baseline","eixo":"baseline","estimado":true,"precisao":92,"recall":86,"tokens":257200,"req":8.5,"cache":0.55,"errados":4,"itens":30,"cotados":null,"sem_match":null,"fallbacks":null,"tempo_total_ms":null,"tempo_item_ms":null}],"biblioteca":{"apelidos":3,"buscas":2,"ausentes":2,"correcoes":2,"apelido_motivos":0},"uso":null};</script>
 <script>
 (function(){
@@ -53,17 +66,17 @@ th{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--dim)}
   var bn=document.getElementById('banner');
   if(u&&b0&&R.length>1){var p=[];if(u.precisao<b0.precisao)p.push('precisao');if(u.recall<b0.recall)p.push('recall');if(u.tokens>b0.tokens)p.push('tokens');if(u.req>b0.req)p.push('requisicoes');if(p.length){bn.className='banner warn';bn.textContent='REGRA DE OURO violada: piorou em '+p.join(', ')+' vs baseline.';}else{bn.className='banner ok';bn.textContent='Regra de ouro OK: nenhum eixo regrediu vs baseline.';}}
   else{bn.className='banner ok';bn.textContent='Baseline registrado. As proximas rodadas serao comparadas aqui.';}
-  var k=document.getElementById('kpis');function kpi(l,v,medir){var d=document.createElement('div');d.className='kpi'+(medir?' medir':'');d.innerHTML='<div class="lbl">'+l+'</div><div class="val">'+v+'</div>';k.appendChild(d);}
+  var k=document.getElementById('kpis');function kpi(l,v,medir,key){var d=document.createElement('div');d.className='kpi'+(medir?' medir':'');d.innerHTML='<div class="lbl">'+l+'</div><div class="val">'+v+'</div><div class="hint">ver evolucao ▸</div>';if(key&&!medir)d.onclick=function(){abrirModal(key);};k.appendChild(d);}
   if(u){
-    kpi('Qualidade (P/R)', f(u.precisao,1)+'<small>% / '+f(u.recall,1)+'%</small>');
-    kpi('Itens sem match', US?(f(US.sem_match_taxa*100,1)+'<small>%</small>'):'a medir', !US);
-    kpi('Tempo da cotacao', US?seg(US.tempo_medio_cotacao_ms):'a medir', !US);
-    kpi('Tempo medio/item', US?(Math.round(US.tempo_medio_item_ms)+'ms'):'a medir', !US);
-    kpi('Tokens / cotacao', f(u.tokens));
-    kpi('Req / cotacao', f(u.req,1));
-    kpi('Cache-hit', f((u.cache||0)*100,1)+'<small>%</small>');
+    kpi('Qualidade (P/R)', f(u.precisao,1)+'<small>% / '+f(u.recall,1)+'%</small>', false, 'qualidade');
+    kpi('Itens sem match', US?(f(US.sem_match_taxa*100,1)+'<small>%</small>'):'a medir', !US, 'sem_match');
+    kpi('Tempo da cotacao', US?seg(US.tempo_medio_cotacao_ms):'a medir', !US, 'tempo');
+    kpi('Tempo medio/item', US?(Math.round(US.tempo_medio_item_ms)+'ms'):'a medir', !US, 'tempo_item');
+    kpi('Tokens / cotacao', f(u.tokens), false, 'tokens');
+    kpi('Req / cotacao', f(u.req,1), false, 'req');
+    kpi('Cache-hit', f((u.cache||0)*100,1)+'<small>%</small>', false, 'cache');
   }
-  kpi('Apelidos', D.biblioteca.apelidos);
+  kpi('Apelidos', D.biblioteca.apelidos, false, 'apelidos');
   var navy='#0D3364',orange='#ee8a1f',green='#157f3b',red='#c0392b';
   function linha(id,series){new Chart(document.getElementById(id),{type:'line',data:{labels:labels,datasets:series},options:{responsive:true,plugins:{legend:{position:'bottom'}},tension:.25}});}
   if(R.length){
@@ -76,6 +89,24 @@ th{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--dim)}
   if(has('errados')||has('sem_match'))document.getElementById('tgErr').remove();
   if(has('tempo_total_ms')||has('tempo_item_ms'))document.getElementById('tgTmp').remove();
   new Chart(document.getElementById('cB'),{type:'bar',data:{labels:['Apelidos','Buscas','Ausentes','Correcoes','Motivos IA'],datasets:[{label:'itens',data:[D.biblioteca.apelidos,D.biblioteca.buscas,D.biblioteca.ausentes,D.biblioteca.correcoes,D.biblioteca.apelido_motivos],backgroundColor:[navy,'#2f74c4',orange,green,'#9a5a00']}]},options:{plugins:{legend:{display:false}}}});
+  // --- modais de evolucao (clique nos KPIs) ---
+  function _serie(arr,label,color){return {label:label,data:arr,borderColor:color,backgroundColor:color};}
+  var _am=US?(US.amostras||[]):[];var _amL=_am.map(function(a,i){return a.d?a.d.slice(5,10):('#'+(i+1));});
+  var MET={
+    qualidade:{t:'Qualidade — precisao / recall',s:'por rodada',f:function(){return {type:'line',data:{labels:labels,datasets:[_serie(R.map(function(r){return r.precisao;}),'Precisao %',navy),_serie(R.map(function(r){return r.recall;}),'Recall %',orange)]}};}},
+    sem_match:{t:'Itens sem match / errados',s:US?'% por cotacao (uso real)':'por rodada',f:function(){return US?{type:'line',data:{labels:_amL,datasets:[_serie(_am.map(function(a){return a.itens?+(a.sem/a.itens*100).toFixed(1):null;}),'Sem match %',red)]}}:{type:'line',data:{labels:labels,datasets:[_serie(R.map(function(r){return r.sem_match;}),'Sem match',red),_serie(R.map(function(r){return r.errados;}),'Errados',orange)]}};}},
+    tempo:{t:'Tempo da cotacao',s:US?'segundos por cotacao (uso real)':'por rodada',f:function(){return US?{type:'line',data:{labels:_amL,datasets:[_serie(_am.map(function(a){return +(a.t/1000).toFixed(1);}),'Cotacao (s)',navy)]}}:{type:'line',data:{labels:labels,datasets:[_serie(R.map(function(r){return r.tempo_total_ms==null?null:r.tempo_total_ms/1000;}),'Cotacao (s)',navy)]}};}},
+    tempo_item:{t:'Tempo medio por item',s:US?'ms por item (uso real)':'por rodada',f:function(){return US?{type:'line',data:{labels:_amL,datasets:[_serie(_am.map(function(a){return a.itens?Math.round(a.t/a.itens):null;}),'Por item (ms)',orange)]}}:{type:'line',data:{labels:labels,datasets:[_serie(R.map(function(r){return r.tempo_item_ms;}),'Por item (ms)',orange)]}};}},
+    tokens:{t:'Tokens por cotacao',s:'por rodada',f:function(){return {type:'line',data:{labels:labels,datasets:[_serie(R.map(function(r){return r.tokens;}),'Tokens/cotacao',navy)]}};}},
+    req:{t:'Requisicoes por cotacao',s:'por rodada',f:function(){return {type:'line',data:{labels:labels,datasets:[_serie(R.map(function(r){return r.req;}),'Req/cotacao',navy)]}};}},
+    cache:{t:'Cache-hit',s:'% por rodada',f:function(){return {type:'line',data:{labels:labels,datasets:[_serie(R.map(function(r){return (r.cache||0)*100;}),'Cache-hit %',green)]}};}},
+    apelidos:{t:'Biblioteca (estado atual)',s:'apelidos / buscas / ausentes / correcoes / motivos',f:function(){return {type:'bar',data:{labels:['Apelidos','Buscas','Ausentes','Correcoes','Motivos IA'],datasets:[{label:'itens',data:[D.biblioteca.apelidos,D.biblioteca.buscas,D.biblioteca.ausentes,D.biblioteca.correcoes,D.biblioteca.apelido_motivos],backgroundColor:[navy,'#2f74c4',orange,green,'#9a5a00']}]},options:{plugins:{legend:{display:false}}}};}},
+  };
+  var _mc=null;
+  function abrirModal(key){var m=MET[key];if(!m)return;document.getElementById('mTit').textContent=m.t;document.getElementById('mSub').textContent=m.s||'';if(_mc){_mc.destroy();_mc=null;}var cfg=m.f();if(!cfg.options)cfg.options={responsive:true,plugins:{legend:{position:'bottom'}},tension:.25};_mc=new Chart(document.getElementById('cModal'),cfg);document.getElementById('modal').classList.add('show');}
+  document.getElementById('mX').onclick=function(){document.getElementById('modal').classList.remove('show');};
+  document.getElementById('modal').onclick=function(e){if(e.target===this)this.classList.remove('show');};
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')document.getElementById('modal').classList.remove('show');});
   var tb=document.querySelector('#tab tbody');
   R.forEach(function(r){var tr=document.createElement('tr');tr.innerHTML='<td>R'+r.n+'</td><td>'+(r.data||'').slice(0,10)+'</td><td>'+r.eixo+'</td><td>'+r.veredito+'</td><td>'+f(r.precisao,1)+'%</td><td>'+f(r.recall,1)+'%</td><td>'+(r.errados==null?'-':r.errados)+'</td><td>'+f(r.tokens)+'</td><td>'+seg(r.tempo_total_ms)+'</td>';tb.appendChild(tr);});
   // Uso real (operador) — do snapshot
