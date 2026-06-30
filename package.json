@@ -1,0 +1,16 @@
+{
+  "name": "cotacao-atacaderj",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Cotacao por IA + loop de melhoria (Atacaderj). Scripts do loop em ferramentas/.",
+  "scripts": {
+    "validar": "node ferramentas/validar-biblioteca.mjs biblioteca",
+    "selar": "node ferramentas/selar-app.mjs app/cotacao_ia_oficial.html",
+    "selar:check": "node ferramentas/selar-app.mjs app/cotacao_ia_oficial.html --check",
+    "evolucao": "node ferramentas/evolucao.mjs",
+    "proxy": "node ferramentas/proxy-teste/servir.mjs"
+  },
+  "devDependencies": {
+    "jsdom": "^29.1.1"
+  }
+}
