@@ -2,7 +2,7 @@
 // =============================================================================
 // selar-app.mjs — RE-SELA a trava de integridade do app de cotacao.
 // -----------------------------------------------------------------------------
-// O app (app/cotacao_ia_oficial.html) tem, perto do fim, um <script> anti-
+// O app (app/cotacao-auditoria-atacaderj.html) tem, perto do fim, um <script> anti-
 // adulteracao que faz, em runtime no navegador:
 //
 //     const h  = sha256( document.getElementById('app-core').textContent )
@@ -20,7 +20,7 @@
 //
 // Uso:
 //   node ferramentas/selar-app.mjs [caminho-do-app.html] [--check]
-//     (sem args usa app/cotacao_ia_oficial.html)
+//     (sem args usa app/cotacao-auditoria-atacaderj.html)
 //   --check : so REPORTA (selado? precisa re-selar?). NAO grava. Exit 1 se fora de sincronia.
 //
 // Requer jsdom:  rode "npm install" na raiz do repo uma vez.
@@ -30,7 +30,7 @@ import { createHash } from 'node:crypto';
 
 const args = process.argv.slice(2);
 const CHECK = args.includes('--check');
-const file = args.find((a) => !a.startsWith('--')) || 'app/cotacao_ia_oficial.html';
+const file = args.find((a) => !a.startsWith('--')) || 'app/cotacao-auditoria-atacaderj.html';
 
 let JSDOM;
 try {

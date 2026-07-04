@@ -1,4 +1,4 @@
-# Arquitetura de Sincronização — cotacao-atacaderj
+# Arquitetura de Sincronização — cotacao-auditoria-atacaderj
 
 Como o app de cotação roda, como a **biblioteca de aprendizado** acumula entre operadores, e como tudo volta pro **GitHub** (backup + loop de melhoria) — **sem o operador fazer nada nem saber de nada**.
 
@@ -8,7 +8,7 @@ Como o app de cotação roda, como a **biblioteca de aprendizado** acumula entre
 
 ## 1. Contexto: o app roda como **artefato do claude.ai**
 
-O app (`app/cotacao_ia_oficial.html`) é um arquivo único client-side. Ele roda como **artefato de chat do claude.ai** (iframe sandbox em `*.claudeusercontent.com`). Isso define **tudo**:
+O app (`app/cotacao-auditoria-atacaderj.html`) é um arquivo único client-side. Ele roda como **artefato de chat do claude.ai** (iframe sandbox em `*.claudeusercontent.com`). Isso define **tudo**:
 
 - A IA funciona porque o **ambiente do artefato injeta o acesso** à API da Anthropic na conta de quem abre. Por isso o app chama `api.anthropic.com` sem chave — e por isso **não** funciona em `file://`.
 - **Distribuição:** o dono **publica** o artefato e compartilha o **link**. Quem abre roda com a **própria conta e créditos** (você não paga pelo uso do operador). GitHub **não** entra na distribuição — é só o cofre de versões.
@@ -68,7 +68,7 @@ O operador **só cota e atualiza catálogo** (o trabalho normal dele). Não vê 
 
 | Arquivo | Papel |
 |---|---|
-| `app/cotacao_ia_oficial.html` | o app; camada `_store` (window.storage + fallback); export silencioso dentro de `confirmarCatalogo()` |
+| `app/cotacao-auditoria-atacaderj.html` | o app; camada `_store` (window.storage + fallback); export silencioso dentro de `confirmarCatalogo()` |
 | `ferramentas/selar-app.mjs` | re-sela a trava de integridade (SHA-256 do `#app-core`) após qualquer mudança no app |
 | `ferramentas/sync-operador/` | script + guia: PC do operador sobe o snapshot pro GitHub sozinho (token fino) |
 | `ferramentas/mesclar-snapshot.mjs` | funde `snapshots/operador-latest.json` na biblioteca curada (`npm run mesclar`) |

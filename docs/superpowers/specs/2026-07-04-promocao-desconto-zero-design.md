@@ -2,7 +2,7 @@
 
 **Data:** 2026-07-04
 **Status:** aprovado (design) — aguardando revisão do spec
-**Repositório:** `cotacao-atacaderj` · app: `app/cotacao_ia_oficial.html` · lógica pura: `ferramentas/auditoria-calc.mjs`
+**Repositório:** `cotacao-auditoria-atacaderj` · app: `app/cotacao-auditoria-atacaderj.html` · lógica pura: `ferramentas/auditoria-calc.mjs`
 
 ## 1. Objetivo
 
@@ -88,7 +88,7 @@ Na lógica pura (`auditoria-calc.mjs`) e no espelho do app:
 
 ## 10. Impacto nos arquivos
 
-- `app/cotacao_ia_oficial.html`: `mesclarCatalogos` (flag), `descontoMaxProduto` (regra), `salvarEdicaoPreco` (mensagem), `_precoCellHtml` (badge), cópias de produto (`pr`), espelho da auditoria (`_audCatMap`/`_audDescFrac`/`_audRegra`/`_audItens`) + re-selagem.
+- `app/cotacao-auditoria-atacaderj.html`: `mesclarCatalogos` (flag), `descontoMaxProduto` (regra), `salvarEdicaoPreco` (mensagem), `_precoCellHtml` (badge), cópias de produto (`pr`), espelho da auditoria (`_audCatMap`/`_audDescFrac`/`_audRegra`/`_audItens`) + re-selagem.
 - `ferramentas/auditoria-calc.mjs` + `ferramentas/auditoria-calc.test.mjs`: `pr` no catMap, desconto zero, regra "promoção", casos novos.
 - Regenerar a cópia publicável, como no ciclo anterior.
 - Esquema de `window.storage['atacaderj_catalogo']`: campo novo **opcional** `pr` por produto (retrocompatível).

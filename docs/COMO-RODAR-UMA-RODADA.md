@@ -22,7 +22,7 @@ o qual voce compara e a **ultima rodada aprovada** (na Rodada 1, e
 
 ## Etapa 1 — Exportar e versionar a biblioteca atual
 
-- [ ] Abri o app (`cotacao_ia_oficial.html`) no navegador.
+- [ ] Abri o app (`cotacao-auditoria-atacaderj.html`) no navegador.
 - [ ] Colei `ferramentas/exportar-biblioteca.js` no console e gerei a saida.
 - [ ] Salvei/atualizei `biblioteca/apelidos.json`, `biblioteca/buscas.json` e
       `biblioteca/ausentes.json` com a saida do export.

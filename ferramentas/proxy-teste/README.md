@@ -25,7 +25,7 @@ ANTHROPIC_API_KEY=sk-ant-... node ferramentas/proxy-teste/servir.mjs
 
 Depois abra **http://localhost:8787**. A cotação por IA passa a responder usando a sua chave/cota.
 
-Flags: `--porta 8787`, `--app app/cotacao_ia_oficial.html`.
+Flags: `--porta 8787`, `--app app/cotacao-auditoria-atacaderj.html`.
 
 ## Segurança
 

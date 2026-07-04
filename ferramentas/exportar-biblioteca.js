@@ -1,7 +1,7 @@
 /*
  * ============================================================================
  *  exportar-biblioteca.js
- *  Cole no Console do DevTools (F12) COM O APP cotacao_ia_oficial.html ABERTO.
+ *  Cole no Console do DevTools (F12) COM O APP cotacao-auditoria-atacaderj.html ABERTO.
  *  NAO modifica o app. Apenas LE os localStorage e dispara o download dos JSONs
  *  no formato da pasta /biblioteca (apelidos.json, buscas.json, ausentes.json).
  *

@@ -1,7 +1,7 @@
 # LOOP DE MELHORIA — Cotação por IA (Atacaderj)
 
 > Processo iterativo de melhoria contínua para a ferramenta de cotação de preços por IA
-> (`cotacao_ia_oficial.html`). A cada **RODADA** o sistema fica melhor nos **3 EIXOS** —
+> (`cotacao-auditoria-atacaderj.html`). A cada **RODADA** o sistema fica melhor nos **3 EIXOS** —
 > **VELOCIDADE**, **QUALIDADE** e **TOKENS** — **sem nunca sacrificar nenhum dos três**.
 >
 > Documento didático, em pt-BR. Não modifica o app: o app só muda quando uma rodada é
@@ -102,7 +102,7 @@ disfarçadas, use estas faixas (ajuste com o tempo, registrando no `_SCHEMA.md`)
 tenha contra o que comparar. Sem baseline não existe "não-regressão".
 
 **Entradas.**
-- O app atual (`cotacao_ia_oficial.html`) sem nenhuma alteração.
+- O app atual (`cotacao-auditoria-atacaderj.html`) sem nenhuma alteração.
 - Um **conjunto fixo de cotações de teste** (o "golden set"): listas reais representativas
   (digitadas e manuscritas), com o resultado correto anotado à mão por quem conhece o catálogo.
   Recomenda-se 20–50 listas cobrindo: itens fáceis, itens com marca específica, variações

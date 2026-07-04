@@ -23,7 +23,7 @@ $scriptPath = Join-Path $dir 'sync-biblioteca.ps1'
 # 1) config.json (token + repo)
 @{
   token    = $TOKEN
-  repo     = 'Rodrigopereirarangel/cotacao-atacaderj'
+  repo     = 'Rodrigopereirarangel/cotacao-auditoria-atacaderj'
   repoPath = 'biblioteca/snapshots/operador-latest.json'
   branch   = 'main'
 } | ConvertTo-Json | Set-Content -Path (Join-Path $dir 'config.json') -Encoding UTF8

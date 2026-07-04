@@ -1,5 +1,5 @@
 import { readFileSync } from 'node:fs';
-const html = readFileSync('app/cotacao_ia_oficial.html', 'utf8');
+const html = readFileSync('app/cotacao-auditoria-atacaderj.html', 'utf8');
 const re = /<script(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/gi;
 let m, i = 0, bad = 0;
 while ((m = re.exec(html)) !== null) {

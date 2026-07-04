@@ -1,7 +1,7 @@
 # Atacaderj-Cotacao-Loop
 
 Conhecimento versionado e **loop de melhoria** para o app de cotacao do Atacaderj
-(`cotacao_ia_oficial.html`).
+(`cotacao-auditoria-atacaderj.html`).
 
 ---
 
@@ -26,7 +26,7 @@ revisao) que **melhora em loop**. Cada rodada de melhoria e medida nos 3 eixos â
 velocidade, qualidade e tokens â€” contra um baseline, com um gate automatico que
 **barra qualquer mudanca que piore qualquer um dos tres**.
 
-> O app (`cotacao_ia_oficial.html`) **nao e tocado** por este repo. Tudo aqui e
+> O app (`cotacao-auditoria-atacaderj.html`) **nao e tocado** por este repo. Tudo aqui e
 > aditivo: biblioteca exportavel/importavel, benchmark, metricas, backlog,
 > validacao e CI.
 

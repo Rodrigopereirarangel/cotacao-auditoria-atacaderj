@@ -17,7 +17,7 @@ Agendador do Windows roda sync-biblioteca.ps1 (ex.: a cada 30 min)
 
 ### 1) Criar um token fino do GitHub
 - GitHub → **Settings → Developer settings → Fine-grained tokens → Generate new token**.
-- **Repository access:** *Only select repositories* → `cotacao-atacaderj`.
+- **Repository access:** *Only select repositories* → `cotacao-auditoria-atacaderj`.
 - **Permissions:** *Repository → Contents → Read and write*.
 - Gere e **copie** o token (`github_pat_...`).
 

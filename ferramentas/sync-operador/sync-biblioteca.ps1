@@ -18,7 +18,7 @@
 $ErrorActionPreference = 'Stop'
 try { [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12 } catch {}
 
-$Repo      = 'Rodrigopereirarangel/cotacao-atacaderj'
+$Repo      = 'Rodrigopereirarangel/cotacao-auditoria-atacaderj'
 $RepoPath  = 'biblioteca/snapshots/operador-latest.json'
 $Branch    = 'main'
 $Token     = $env:ATACADERJ_GH_TOKEN

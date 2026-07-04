@@ -1,6 +1,6 @@
 # Biblioteca versionada do Atacaderj — _SCHEMA
 
-Este diretorio e a **ponte de conhecimento** entre o navegador (onde o app `cotacao_ia_oficial.html` roda 100% client-side e guarda tudo em `localStorage`) e o repositorio versionado (git). O objetivo e **acumular conhecimento** — apelidos, buscas, falhas e correcoes — de forma duravel, auditavel e compartilhavel entre dispositivos, alimentando o loop de melhoria dos 3 eixos: **VELOCIDADE**, **QUALIDADE** e **TOKENS**.
+Este diretorio e a **ponte de conhecimento** entre o navegador (onde o app `cotacao-auditoria-atacaderj.html` roda 100% client-side e guarda tudo em `localStorage`) e o repositorio versionado (git). O objetivo e **acumular conhecimento** — apelidos, buscas, falhas e correcoes — de forma duravel, auditavel e compartilhavel entre dispositivos, alimentando o loop de melhoria dos 3 eixos: **VELOCIDADE**, **QUALIDADE** e **TOKENS**.
 
 > O app **nao foi modificado**. Estes arquivos sao **aditivos**. O fluxo e:
 > 1. Operador abre o app, trabalha normalmente (o app grava no `localStorage`).

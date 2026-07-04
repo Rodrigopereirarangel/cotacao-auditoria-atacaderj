@@ -1,7 +1,7 @@
-# Backlog priorizado de otimizações — cotacao_ia_oficial.html
+# Backlog priorizado de otimizações — cotacao-auditoria-atacaderj.html
 
 Documento aditivo. Não altera o app. Cada item aponta o ponto exato no código
-(`cotacao_ia_oficial.html`), a mudança proposta com trecho, e como validar que
+(`cotacao-auditoria-atacaderj.html`), a mudança proposta com trecho, e como validar que
 nenhum dos 3 eixos regride.
 
 ## A regra de ouro (os 3 eixos)

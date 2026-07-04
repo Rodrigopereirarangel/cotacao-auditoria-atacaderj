@@ -1,7 +1,7 @@
 /*
  * ============================================================================
  *  importar-biblioteca.js
- *  Cole no Console do DevTools (F12) COM O APP cotacao_ia_oficial.html ABERTO.
+ *  Cole no Console do DevTools (F12) COM O APP cotacao-auditoria-atacaderj.html ABERTO.
  *  Abre um seletor de arquivos: escolha 1 ou mais dos JSONs da pasta /biblioteca
  *  (apelidos.json, buscas.json, ausentes.json). Grava de volta no localStorage
  *  fazendo MERGE (uniao) — NUNCA apaga o que ja existe.

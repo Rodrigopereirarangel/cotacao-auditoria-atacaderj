@@ -19,7 +19,7 @@
 //   $env:ANTHROPIC_API_KEY="sk-ant-..."; node ferramentas/proxy-teste/servir.mjs
 // USO (bash):
 //   ANTHROPIC_API_KEY=sk-ant-... node ferramentas/proxy-teste/servir.mjs
-// Flags opcionais:  --porta 8787   --app app/cotacao_ia_oficial.html
+// Flags opcionais:  --porta 8787   --app app/cotacao-auditoria-atacaderj.html
 //
 // Depois abra http://localhost:8787  (a IA passa a usar SUA chave/cota).
 // SEGURANCA: a chave fica so na sua maquina (variavel de ambiente). Nunca e
@@ -32,7 +32,7 @@ import { readFileSync } from 'node:fs';
 const args = process.argv.slice(2);
 const getArg = (k, d) => { const i = args.indexOf(k); return i >= 0 ? args[i + 1] : d; };
 const PORTA = parseInt(getArg('--porta', '8787'), 10);
-const APP = getArg('--app', 'app/cotacao_ia_oficial.html');
+const APP = getArg('--app', 'app/cotacao-auditoria-atacaderj.html');
 const KEY = process.env.ANTHROPIC_API_KEY || '';
 const VERSION = process.env.ANTHROPIC_VERSION || '2023-06-01';
 

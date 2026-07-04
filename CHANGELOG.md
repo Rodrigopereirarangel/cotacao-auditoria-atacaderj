@@ -1,8 +1,13 @@
-# CHANGELOG — cotacao-atacaderj
+# CHANGELOG — cotacao-auditoria-atacaderj
 
 Evolução do repositório e do loop de melhoria. Cada **rodada** entra aqui quando o PR é mesclado. Os números dos 3 eixos ficam em `metricas/rodada-NNN.json` — rode `node ferramentas/evolucao.mjs` para a tabela comparativa rodada a rodada.
 
 > Versionamento simples por rodada do loop. A regra de ouro vale para todas: nenhuma rodada pode piorar velocidade, qualidade **ou** tokens.
+
+## Renomeação (2026-07-04)
+- Repositório renomeado **`cotacao-atacaderj` → `cotacao-auditoria-atacaderj`** (o app passou a conter também a Auditoria de Desconto). O GitHub redireciona o nome antigo.
+- App renomeado **`app/cotacao_ia_oficial.html` → `app/cotacao-auditoria-atacaderj.html`**. Ferramentas, scripts, CI e docs vivos atualizados; specs/planos históricos e métricas preservados como estavam.
+- Operador: atualizar o sync instalado (rodar de novo `ferramentas/sync-operador/instalar.ps1`) para apontar ao novo nome do repo.
 
 ## [Não liberado]
 

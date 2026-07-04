@@ -49,7 +49,7 @@ julga. Nunca chama a API.
 
 ## 1. O que o app JÁ rastreia (não precisamos reinventar)
 
-Confirmado no código real (`cotacao_ia_oficial.html`):
+Confirmado no código real (`cotacao-auditoria-atacaderj.html`):
 
 | Sinal | Onde vive | Como é alimentado |
 |-------|-----------|-------------------|
