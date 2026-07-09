@@ -9,6 +9,44 @@ Evolução do repositório e do loop de melhoria. Cada **rodada** entra aqui qua
 - App renomeado **`app/cotacao_ia_oficial.html` → `app/cotacao-auditoria-atacaderj.html`**. Ferramentas, scripts, CI e docs vivos atualizados; specs/planos históricos e métricas preservados como estavam.
 - Operador: atualizar o sync instalado (rodar de novo `ferramentas/sync-operador/instalar.ps1`) para apontar ao novo nome do repo.
 
+## Catálogo se atualiza sozinho no navegador aberto + trava do upload manual (2026-07-09)
+
+Pergunta do dono: se o robô sobe um `catalogo_bridge.json` novo às 12h05 e o vendedor já
+está com a aba do artifact aberta desde as 08h, ele fica com preço velho até fechar e
+reabrir? Sim — `window.storage` é lido só 1x no carregamento da página. Faltava o app
+**se checar sozinho** (um "F5" só dos dados, sem recarregar a página) e **avisar/travar**
+o upload manual conforme a automação estiver saudável ou não.
+
+- **Polling silencioso a cada 3min** (`_catIniciarPolling`/`_catVerificarAtualizacao`):
+  relê só um marcador leve no storage compartilhado (`atacaderj_catalogo_versao`,
+  `{gerado_em,origem}` — não o catálogo inteiro) e compara com a versão em uso na aba.
+  - **Carrinho vazio** (`cotacaoItensOrdem.length===0`): troca o catálogo sozinho, sem
+    pedir nada ao vendedor — é exatamente o "puxar sozinho" pedido.
+  - **Carrinho com item em andamento**: NÃO troca embaixo do vendedor (mudaria preço de
+    item já incluído); mostra um aviso fixo no rodapé com botão "Atualizar agora" — é o
+    "mensagem forçando a atualizar, tipo F5" pedido, só que sem derrubar a cotação atual.
+- **`gerado_em`/`origem` (`'robo'`|`'manual'`) passam a ser gravados** junto do catálogo
+  (`atacaderj_catalogo` e o novo `atacaderj_catalogo_versao`) tanto no upload do bridge
+  quanto no fluxo manual de 3 relatórios — antes só existia a data (dia), sem hora, o que
+  não dava para saber se uma versão era mais nova que outra dentro do mesmo dia.
+- **Trava do upload manual quando a automação está saudável**: no modal 📦, se a última
+  versão aplicada veio do robô (`origem==='robo'`) e tem menos de 5h, a área de upload
+  (arquivo único do bridge + contingência dos 3 relatórios) fica desabilitada com um aviso
+  azul explicando por quê — evita um operador sobrescrever por engano com um relatório
+  velho que ainda está aberto no computador. Tem um link de escape ("preciso enviar mesmo
+  assim") para não travar de vez em uma emergência.
+- **Destrava sozinho se a comunicação for perdida**: sem novidade do robô há mais de 5h,
+  a trava cai automaticamente e aparece um aviso vermelho — o upload manual (o mesmo fluxo
+  de sempre) volta a ser o caminho, exatamente como pedido ("caso perca a comunicação
+  deixe o upload manual assim como o original").
+- Testado com smoke test em `jsdom` (harness descartável, não versionado): 13/13 cenários
+  passaram — auto-apply de carrinho vazio, aviso + apply manual de carrinho ocupado, trava
+  ativa/inativa por frescor, e a regra de que origem `'manual'` nunca trava.
+- Não depende do robô Playwright existir: qualquer escrita em `atacaderj_catalogo_versao`
+  (inclusive um upload manual de hoje) já aciona o mecanismo. Quando o robô for construído,
+  ele só precisa completar o MESMO fluxo de upload do botão 📦 — o resto (detecção,
+  auto-apply, trava/destrava) já funciona.
+
 ## App autocontido p/ publicar como artifact (2026-07-09)
 
 O app-fonte carrega 3 recursos de **CDN externo** (xlsx-js-style, Tabler icons,
