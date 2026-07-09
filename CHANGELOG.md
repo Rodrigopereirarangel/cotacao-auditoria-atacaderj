@@ -9,6 +9,36 @@ Evolução do repositório e do loop de melhoria. Cada **rodada** entra aqui qua
 - App renomeado **`app/cotacao_ia_oficial.html` → `app/cotacao-auditoria-atacaderj.html`**. Ferramentas, scripts, CI e docs vivos atualizados; specs/planos históricos e métricas preservados como estavam.
 - Operador: atualizar o sync instalado (rodar de novo `ferramentas/sync-operador/instalar.ps1`) para apontar ao novo nome do repo.
 
+## Arquivo único do bridge no botão 📦 + Auditoria pelo storage (2026-07-08)
+
+Implementa o plano `docs/superpowers/plans/2026-07-07-aceitar-catalogo-bridge.md`
+(aprovado no design de 2026-07-07: o app roda como **artifact do claude.ai** e
+não alcança a rede da loja — os dados viajam por upload, não por fetch), com
+uma extensão: o arquivo único também carrega o histórico da Auditoria.
+
+- **Botão 📦 Catálogo aceita o `catalogo_bridge.json`** do `erp-bridge-atacaderj`
+  (seção verde "Arquivo único do bridge"; os 3 relatórios do ERP viram
+  contingência). Valida `origem`, `gerado_em` de HOJE e cada produto
+  (nome≥4, v>0, sem MORTO, `total` == validados). IDs estáveis p/ o robô:
+  `#catBridgeArq`, `#catConfirmar` (novos), `#btnCatalogo`, `#catalogBadge`.
+- **Extensão do contrato — `pedidos_venda`**: o mesmo arquivo traz os itens dos
+  pedidos de venda/DAV fechados nos últimos 7 dias
+  (`{janela_dias,pedidos:[{dia,ped,dav,cli,vend,itens:[[cod,emb,qtde,valor,custo_un]]}]}`).
+  Ao confirmar (`confirmarCatalogoBridge`), isso é salvo no storage
+  compartilhado (`atacaderj_pedidos_venda`, ~160KB) — um upload do robô
+  alimenta cotação E auditoria de todos os usuários do artifact.
+- **Aba 🔍 Auditoria agora funciona no artifact**: o seletor de dia lê o
+  histórico na ordem storage (arquivo do bridge) → fetch local
+  (`pedidos_venda_dav.csv`, p/ uso fora do claude.ai) → upload manual do
+  `.xlsx` (fallback de sempre). Nome do produto vem do CATALOG em uso.
+- `ferramentas/gerar-fixture-bridge.mjs` — fixture falsa (60 produtos + 4
+  pedidos) p/ testar o fluxo offline; `ferramentas/fixtures/` no .gitignore.
+- Validado com o arquivo REAL da ponte: 4.600 produtos + 262 pedidos aceitos;
+  auditoria de 06/07 via storage reproduz exatamente o motor validado contra o
+  relatório manual do ERP (199 linhas · 154 auditados · 33 divergências ·
+  R$ 105,92). Sintaxe validada; a cópia pública do app não carrega a constante
+  da trava (`h==='…'`), então não há re-selagem aplicável neste repo.
+
 ## Auditoria automática pela ponte ERP (2026-07-07)
 
 Feito no PC-ponte da loja, junto com o repo `erp-bridge-atacaderj` (privado), que

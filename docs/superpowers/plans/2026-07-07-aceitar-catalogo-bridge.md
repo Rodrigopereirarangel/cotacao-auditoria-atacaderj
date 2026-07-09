@@ -1,5 +1,17 @@
 # Aceitar o arquivo único do bridge (catalogo_bridge.json) — Plano de Implementação
 
+> **STATUS 2026-07-08: IMPLEMENTADO** (sessão do PC-ponte, commit no CHANGELOG),
+> com uma **extensão de contrato**: o arquivo único também carrega
+> `"pedidos_venda"` (itens dos pedidos de venda/DAV fechados nos últimos 7
+> dias), persistido no storage compartilhado (`atacaderj_pedidos_venda`) pelo
+> `confirmarCatalogoBridge()` — é o que faz o seletor de dia da aba 🔍 Auditoria
+> funcionar dentro do artifact (sem fetch). O `#catConfirmar` chama
+> `confirmarCatalogoBridge()` (que persiste o histórico e delega ao
+> `confirmarCatalogo()` intocado); os IDs do contrato com o robô não mudaram.
+> Diferença p/ este plano: a cópia pública do app não tem a constante da trava
+> de integridade, então `npm run selar` não se aplica (validação usada:
+> `ferramentas/_aud/validar-sintaxe.mjs`).
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** O botão "📦 Catálogo" do app passa a aceitar o `catalogo_bridge.json` gerado pelo `erp-bridge-atacaderj` (arquivo único, já mesclado e com data), mantendo o fluxo dos 3 relatórios do ERP como contingência — e com IDs estáveis para o robô de upload operar.

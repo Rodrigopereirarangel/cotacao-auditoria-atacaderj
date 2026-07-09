@@ -25,3 +25,6 @@ secrets*.json
 # --- Temporarios ---
 *.tmp
 *.log
+
+# fixtures geradas (teste offline do fluxo bridge)
+ferramentas/fixtures/
