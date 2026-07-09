@@ -10,7 +10,8 @@
     "evolucao": "node ferramentas/evolucao.mjs",
     "dashboard": "node ferramentas/gerar-dashboard.mjs",
     "mesclar": "node ferramentas/mesclar-snapshot.mjs biblioteca && node ferramentas/gerar-dashboard.mjs",
-    "proxy": "node ferramentas/proxy-teste/servir.mjs"
+    "proxy": "node ferramentas/proxy-teste/servir.mjs",
+    "publicavel": "node ferramentas/gerar-app-publicavel.mjs"
   },
   "devDependencies": {
     "jsdom": "^29.1.1"

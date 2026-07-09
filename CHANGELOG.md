@@ -9,6 +9,26 @@ Evolução do repositório e do loop de melhoria. Cada **rodada** entra aqui qua
 - App renomeado **`app/cotacao_ia_oficial.html` → `app/cotacao-auditoria-atacaderj.html`**. Ferramentas, scripts, CI e docs vivos atualizados; specs/planos históricos e métricas preservados como estavam.
 - Operador: atualizar o sync instalado (rodar de novo `ferramentas/sync-operador/instalar.ps1`) para apontar ao novo nome do repo.
 
+## App autocontido p/ publicar como artifact (2026-07-09)
+
+O app-fonte carrega 3 recursos de **CDN externo** (xlsx-js-style, Tabler icons,
+fonte Inter). **Qualquer artifact do claude.ai bloqueia hosts externos por CSP**
+— então o XLSX (ler os relatórios + exportar o Excel da Auditoria) não carregava
+e quebrava essas funções (foi o que a sessão do Cowork observou). Causa: a
+dependência de CDN, não onde se publica — aconteceria igual em Netlify/Vercel.
+
+- **`ferramentas/gerar-app-publicavel.mjs`** (`npm run publicavel`) gera
+  `app/cotacao-auditoria-atacaderj.publicavel.html` **100% autocontido**:
+  XLSX embutido inline (offline, CSP-safe); Tabler (webfont sem uso no corpo)
+  e Inter (font-family cai p/ Segoe UI/system-ui) removidos. Única ref externa
+  que permanece: o proxy de IA do claude.ai (runtime do artifact, não é CDN).
+- Cuidado técnico: o replace do `<script src>` usa **função** (não string) —
+  o bundle minificado contém `$&`/`$'` que o replace-por-string reinjetaria.
+- Verificado: XLSX embutido faz round-trip de planilha em contexto de
+  navegador (require indefinido → usa o fallback de codepage); 0 refs de CDN;
+  sintaxe OK. O `.publicavel.html` é derivado (gitignored) — **publique ELE**
+  como artifact, não o fonte.
+
 ## Arquivo único do bridge no botão 📦 + Auditoria pelo storage (2026-07-08)
 
 Implementa o plano `docs/superpowers/plans/2026-07-07-aceitar-catalogo-bridge.md`

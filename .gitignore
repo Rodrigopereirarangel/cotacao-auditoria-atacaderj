@@ -28,3 +28,6 @@ secrets*.json
 
 # fixtures geradas (teste offline do fluxo bridge)
 ferramentas/fixtures/
+
+# app autocontido gerado p/ publicar (derivado; rode: npm run publicavel)
+app/*.publicavel.html
