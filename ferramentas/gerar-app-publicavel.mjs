@@ -46,9 +46,10 @@ if (existsSync(BRIDGE_JSON)) {
     const dataBr = `${m[3]}/${m[2]}/${m[1]}`;
     const produtos = o.produtos.slice().sort((a, b) => String(a.p).localeCompare(String(b.p), 'pt-BR'));
     const catStr = JSON.stringify({ produtos, data: dataBr, gerado_em: o.gerado_em, origem: 'publicacao' });
-    // auditoria: só o dia anterior à geração (mesma regra do commit v2)
+    // auditoria: só o dia anterior à geração (loja não abre domingo → pula p/ sábado)
     let pvStr = null;
-    const ontem = new Date(new Date(`${m[1]}-${m[2]}-${m[3]}T12:00:00`).getTime() - 86400000);
+    let ontem = new Date(new Date(`${m[1]}-${m[2]}-${m[3]}T12:00:00`).getTime() - 86400000);
+    if (ontem.getDay() === 0) ontem = new Date(ontem.getTime() - 86400000);
     const diaOntem = `${ontem.getFullYear()}-${String(ontem.getMonth() + 1).padStart(2, '0')}-${String(ontem.getDate()).padStart(2, '0')}`;
     const peds = (o.pedidos_venda?.pedidos || []).filter(x => x && String(x.dia).slice(0, 10) === diaOntem && Array.isArray(x.itens) && x.itens.length);
     if (peds.length) pvStr = JSON.stringify({ gerado_em: o.gerado_em, janela_dias: 1, pedidos: peds });

@@ -11,7 +11,8 @@ const assert = (c, m) => { if (!c) { falhas++; console.error('FALHOU:', m); } el
 
 const agora = new Date();
 const isoHoje = agora.toISOString();
-const ontem = new Date(agora.getTime() - 86400000);
+let ontem = new Date(agora.getTime() - 86400000);
+if (ontem.getDay() === 0) ontem = new Date(ontem.getTime() - 86400000); // loja fechada domingo → sábado
 const diaOntem = `${ontem.getFullYear()}-${String(ontem.getMonth() + 1).padStart(2, '0')}-${String(ontem.getDate()).padStart(2, '0')}`;
 const catStr = JSON.stringify({
   produtos: Array.from({ length: 60 }, (_, i) => ({ c: i + 1, p: 'PRODUTO V2 ' + String(i + 1).padStart(3, '0'), q: 1, v: 2 + i })),
