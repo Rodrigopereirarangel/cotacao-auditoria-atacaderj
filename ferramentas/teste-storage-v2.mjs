@@ -90,5 +90,14 @@ window.storage._data.set('atacaderj_v2_p', JSON.stringify({ gb: 999, ga: null, v
 await window._catVerificarAtualizacao();
 assert(window.eval("CATALOG.some(p=>p.p.startsWith('PRODUTO V3'))"), 'polling aplicou a geração nova sozinho');
 
+// 6) janelas de horario do banco (_bancoNoHorario com "agora" fixo)
+const j = (ge, agora) => window.eval(`_bancoNoHorario(${JSON.stringify(ge)}, new Date(${JSON.stringify(agora)}))`);
+assert(j('2026-07-10 12:00:12', '2026-07-10T14:00:00').ok === true, 'janela: arquivo das 12:00 vale às 14:00');
+assert(j('2026-07-10 08:00:05', '2026-07-10T14:00:00').ok === false, 'janela: arquivo das 08:00 NÃO vale às 14:00 (janela atual: 12:00)');
+assert(j('2026-07-10 12:00:12', '2026-07-10T15:30:00').ok === true, 'janela: tolerância de 45min — às 15:30 a janela das 15:00 ainda não cobra');
+assert(j('2026-07-10 12:00:12', '2026-07-10T15:50:00').ok === false, 'janela: às 15:50 já cobra a janela das 15:00');
+assert(j('2026-07-09 18:00:10', '2026-07-10T05:00:00').ok === true, 'janela: madrugada aceita o banco das 18:00 de ontem');
+assert(j(null, '2026-07-10T14:00:00').ok === false, 'janela: sem gerado_em nunca está no horário');
+
 console.log(falhas === 0 ? '\nTUDO OK' : `\n${falhas} FALHA(S)`);
 process.exit(falhas ? 1 : 0);
