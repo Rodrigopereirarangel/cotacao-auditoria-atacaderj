@@ -87,7 +87,6 @@ const itens = todos.filter((x) => x.dia === DIA && Number.isInteger(x.cod));
 
 const res = auditarItens(itens, catMap);
 const div = res.divergencias;
-const r2 = (n) => Math.round(n * 100) / 100;
 const fmt = (n) => 'R$ ' + Number(n).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
 // ---------- resumo por vendedor
@@ -113,7 +112,7 @@ if (div.length) {
 if (res.semCadastro.length) linhas.push('', `(${res.semCadastro.length} item(ns) sem preço de tabela não avaliados)`);
 const resumo = linhas.join('\n');
 
-// ---------- xlsx (flat, agrupado por vendedor na ordenação)
+// ---------- xlsx estilizado p/ celular (abas Resumo/Divergências/Completa)
 let XLSX = null;
 try { XLSX = (await import('xlsx-js-style')).default; } catch { /* opcional */ }
 mkdirSync(OUTDIR, { recursive: true });
@@ -122,21 +121,8 @@ writeFileSync(base + '.txt', resumo, 'utf8');
 
 let xlsxPath = null;
 if (XLSX) {
-  const cab = ['Vendedor', 'Cliente', 'Pedido', 'DAV', 'Cód', 'Produto', 'Emb', 'Qtd',
-    'Tabela', 'Custo', 'Preço mín', 'Vendido/un', 'Desc.', 'Falta/un', 'Regra', 'Curva', 'Impacto'];
-  const rows = div
-    .sort((a, b) => (a.vend || '').localeCompare(b.vend || '') || (a.cli || '').localeCompare(b.cli || '') || a.ped - b.ped)
-    .map((x) => [x.vend, x.cli, x.ped, x.nota || '', x.cod, x.prod, x.emb, x.qt,
-      r2(x.base), r2(x.custo || 0), r2(x.precoMin), r2(x.unit),
-      Math.round(x.descPrat * 1000) / 10 + '%', r2(x.falta), x.regra, x.A ? 'A' : '', r2(x.impacto)]);
-  const resumoWs = [['Auditoria de desconto — ' + diaBr], [],
-    ['Itens auditados', res.auditados], ['Divergências', div.length], ['Impacto total (R$)', r2(impTot)], [],
-    ['Vendedor', 'Itens fora', 'Impacto (R$)'],
-    ...Object.entries(porVend).sort((a, b) => b[1].impacto - a[1].impacto)
-      .map(([v, s]) => [v, s.itens, r2(s.impacto)])];
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(resumoWs), 'Resumo');
-  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([cab, ...rows]), 'Divergências');
+  const { montarWorkbook } = await import('./auditoria-xlsx.mjs');
+  const wb = montarWorkbook(XLSX, { div, res, diaBr, impTot });
   xlsxPath = base + '.xlsx';
   XLSX.writeFile(wb, xlsxPath);
 }

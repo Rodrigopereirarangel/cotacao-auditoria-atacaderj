@@ -4,6 +4,28 @@ Evolução do repositório e do loop de melhoria. Cada **rodada** entra aqui qua
 
 > Versionamento simples por rodada do loop. A regra de ouro vale para todas: nenhuma rodada pode piorar velocidade, qualidade **ou** tokens.
 
+## Planilha diária da auditoria redesenhada p/ celular (2026-07-11)
+
+O xlsx enviado por WhatsApp às 16h era ilegível no celular: 17 colunas truncadas,
+sem cor, sem formato de número. Aprovado pelo dono sobre prévia com os dados
+reais de 10/07.
+
+- **Novo `ferramentas/auditoria-xlsx.mjs`**: monta o workbook estilizado; o
+  `auditoria-diaria.mjs` só chama `montarWorkbook()` (o padrão de dependência
+  opcional do `xlsx-js-style` foi mantido — sem a lib, sai só o `.txt`).
+- **Aba Divergências virou layout mobile**: vendedor e cliente/pedido/DAV são
+  FAIXAS mescladas (não colunas); cada item tem só 5 colunas (Produto · Qt ·
+  Mín · Vendido · Impacto) — cabe na tela em pé sem truncar. Vendedores em
+  ordem de impacto (maior primeiro); âmbar = curva A; vermelho/rosa = item com
+  impacto ≥ R$ 10.
+- **Aba Resumo**: título, 3 indicadores (auditados/divergências/impacto) e
+  ranking de vendedores com % do impacto e linha TOTAL.
+- **Nova aba Completa**: as mesmas 17 colunas de antes, com autofiltro e
+  formatos de número de verdade (desconto vira % numérica, não texto) — para
+  análise no PC.
+- Testado com `--dia 2026-07-10 --outdir` de teste (211 itens, 3 abas ok) e
+  `auditoria-calc.test.mjs` passando. Nenhuma regra de cálculo mudou.
+
 ## Renomeação (2026-07-04)
 - Repositório renomeado **`cotacao-atacaderj` → `cotacao-auditoria-atacaderj`** (o app passou a conter também a Auditoria de Desconto). O GitHub redireciona o nome antigo.
 - App renomeado **`app/cotacao_ia_oficial.html` → `app/cotacao-auditoria-atacaderj.html`**. Ferramentas, scripts, CI e docs vivos atualizados; specs/planos históricos e métricas preservados como estavam.
