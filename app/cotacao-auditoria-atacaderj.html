@@ -5238,6 +5238,9 @@ const statusAtual=salvo?.data?`Catálogo em uso: <b>${CATALOG.length.toLocaleStr
         Envie os <b>três relatórios</b>: atacado, varejo e curva ABC. O <b>VAREJO é a base completa</b>;
         produto que também está no <b>ATACADO usa o preço e a qtde do Atacado 1</b>; a <b>CURVA ABC</b>
         define o teto de desconto. A base antiga é <b>apagada e substituída por completo</b>.
+        ⚠️ Relatórios manuais <b>não trazem promoção</b>: item em promoção pode aparecer como
+        desconto indevido na Auditoria. Prefira o <b>arquivo único do bridge</b> (abaixo), que
+        traz o preço do caixa já com a promoção vigente.
       </p>
       <div id="catSecaoBridge" style="border:1.5px solid #bfe3cb;background:#e7f5ec;border-radius:10px;padding:12px 14px;margin-bottom:14px">
         <div style="font-size:13px;font-weight:800;color:#157f3b;margin-bottom:6px">⚡ Arquivo único do bridge (recomendado)</div>
